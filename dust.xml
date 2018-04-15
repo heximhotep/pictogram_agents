@@ -1,0 +1,23 @@
+<mujoco model="dust">
+	<include file="./common/visual.xml" />
+	<include file="./common/materials.xml" />
+	<asset>
+		<texture builtin="gradient" height="800" mark="random" markrgb="1 1 1" name="skybox" rgb1=".4 .6 .8" rgb2="0 0 0" type="skybox" width="800" />
+	</asset>
+	<option timestep="0.004" />
+	<default>
+		<motor ctrllimited="true" ctrlrange="-1 1" />
+		<general ctrllimited="true" />
+		<default class="dust">
+			<joint armature=".01" damping=".2" range="-60 60" solimplimit="0 .99 .01" stiffness=".1" type="hinge" />
+			<geom friction=".7" solimp=".95 .99 .003" solref=".015 1" />
+		</default>
+	</default>
+	<worldbody>
+		<camera mode="trackcom" name="tracking_top" pos="0 0 0.45" xyaxes="1 0 0 0 1 0" />
+		<geom material="grid" name="ground" size=".5 .5 .1" type="plane" />
+		<body childclass="dust" name="root" pos="0 0 0.5">
+			
+		</body>
+	</actuator>
+</mujoco>
