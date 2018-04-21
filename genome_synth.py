@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[94]:
+# In[111]:
 
 
 import os
@@ -27,7 +27,7 @@ import collections
 from skimage import io, transform
 
 
-# In[103]:
+# In[117]:
 
 
 class Genesis():
@@ -37,12 +37,13 @@ class Genesis():
         self.sites = set()
         self.cameras = set()
         self.bodies = set()
+        self.neighbors = set()
         self.max_joints = max_joints
         self.max_sites = max_sites
         self.max_cameras = max_cameras
         self.rotation_range = [0, 180]
         self.joint_range = [5, 180]
-        self.dimension_range = [0.01, 0.1]
+        self.dimension_range = [0.06, 0.16]
         self.name_counter = 0
         
     def norm_val(self, x, _range):
@@ -106,8 +107,9 @@ class Genesis():
         return result
     
     def mk_root(self, parent):
+        self.__init__()
         result = ET.SubElement(parent, 'body', name='root')
-        result.set('pos', '0 0 0.5')
+        result.set('pos', '0 0 0.8')
         result.set('childclass', 'dust')
         light = ET.SubElement(result, 'light', name='light', diffuse='.6 .6 .6')
         light.set('pos', '0 0 0.5')
@@ -116,8 +118,8 @@ class Genesis():
         light.set('mode', 'track')
         root_joint = ET.SubElement(result, 'joint', name='root', damping='0', limited='false')
         root_joint.set('type','free')
-        root_shape = [0.055] * 3
-        root_geom = self.mk_geom(result, 'root', 'ellipsoid', root_shape)
+        root_shape = [0.025] * 3
+        root_geom = self.mk_geom(result, 'root', 'box', root_shape)
         return result
 
     def mk_defaults(self, parent):
@@ -130,7 +132,7 @@ class Genesis():
         def_joint.set('type', 'hinge')
         def_joint.set('range', '-60 60')
         def_joint.set('damping', '.2')
-        def_joint.set('stiffness', '.1')
+        def_joint.set('stiffness', '.6')
         def_joint.set('armature', '.01')
         def_joint.set('solimplimit', '0 .99 .01')
         
@@ -142,16 +144,16 @@ class Genesis():
 
     def mk_worldbody(self, parent):
         result = ET.SubElement(parent, 'worldbody')
-        ET.SubElement(result, 'camera', name='tracking_top', pos='0 0 0.45', xyaxes='1 0 0 0 1 0', mode='trackcom')
+        ET.SubElement(result, 'camera', name='tracking_top', pos='0 0 4', xyaxes='1 0 0 0 1 0', mode='trackcom')
         ground = ET.SubElement(result, 'geom', name='ground', size='.5 .5 .1', material='grid')
         ground.set('type','plane')
         return result
     
     def mk_segment(self, parent, _args):
         name = _args['name']
-        rotation = self.norm_rotation(_args['rotation'])
+        rotation = _args['rotation']
         offset = _args['offset']
-        dimensions = self.norm_dimension(_args['dimensions'])
+        dimensions = _args['dimensions']
         joint_range = [-_args['joint_range'], _args['joint_range']]
         
         rotation = quaternion.from_euler_angles(rotation)
@@ -161,11 +163,14 @@ class Genesis():
         self.mk_joint(result, name + '_x', [1, 0, 0], _range=joint_range)
         self.mk_joint(result, name + '_y', [0, 1, 0], _range=joint_range)
         self.mk_joint(result, name + '_z', [0, 0, 1], _range=joint_range)
-        this_pos = np.array([dimensions[0] / 2, 0, 0])
+        this_pos = np.array([dimensions[0], 0, 0])
         self.mk_geom(result, name, 'ellipsoid', dimensions, pos=this_pos)
-        return result, this_pos
+        
+        self.neighbors.add((parent.get('name'), _args['name']))
+        self.neighbors.add(('root', _args['name']))
+        return result, np.array([dimensions[0] * 2, 0, 0])
     
-    def mk_actuator_position(self, parent, _name, joint, gear='15'):
+    def mk_actuator_position(self, parent, _name, joint, gear='2'):
         result = ET.SubElement(parent, 'motor', name=_name)
         result.set('joint', joint)
         result.set('gear', gear)
@@ -190,10 +195,18 @@ class Genesis():
         self.name_counter += 1
         result['offset'] = np.zeros(3)
         result['rotation'] = self.norm_rotation(np.random.rand(3))
-        result['dimensions'] = self.norm_dimension(np.random.rand(3))
+        longdim = self.norm_dimension(np.random.rand(1)[0])
+        shortdims = longdim / (2 + np.random.rand(1)[0] * 4)
+        result['dimensions'] = [longdim, shortdims, shortdims]
         result['joint_range'] = self.norm_jointrange(np.random.rand(1))[0]
         result['children'] = []
         result['priority'] = np.random.rand(1)[0]
+        return result
+    
+    def mk_exceptions(self, parent):
+        result = ET.SubElement(parent, 'contact')
+        for neighs in self.neighbors:
+            ET.SubElement(result, 'exclude', body1=neighs[0], body2=neighs[1])
         return result
     
     def combine_trees(self, A, B):
@@ -250,13 +263,16 @@ class Genesis():
         defaults = self.mk_defaults(result)
         worldbody = self.mk_worldbody(result)
         base_dust = self.mk_root(worldbody)
+        #print("about to make morph!")
+        #print(creation)
         seggy = self.mk_morphology(base_dust, creation)
         #seggy = self.mk_morphology(base_dust, 'necron', [0,0,0])
+        self.mk_exceptions(result)
         self.mk_actuators(result)
         return result
 
 
-# In[96]:
+# In[113]:
 
 
 def prettify(elem):
@@ -267,7 +283,7 @@ def prettify(elem):
         return reparsed.toprettyxml(indent="\t")
 
 
-# In[97]:
+# In[116]:
 
 
 def get_model_and_assets():
@@ -277,6 +293,9 @@ def get_model_and_assets():
 class Physics(mujoco.Physics):
     def offset(self):
         return self.named.data.geom_xpos['root']
+    def joint_velocities(self):
+        #print(list(self.gen.joints))
+        return self.named.data.qvel[list(self.gen.joints)]
     def set_gen(self, gen):
         self.gen = gen
 
@@ -286,10 +305,10 @@ class Avoid(base.Task):
 
     def initialize_episode(self, physics):
         """Sets the state of the environment at the start of each episode."""
-        quat = self.random.randn(4)
-        physics.named.data.qpos['root'][3:7] = quat / np.linalg.norm(quat)
-        for joint in physics.gen.joints:
-            physics.named.data.qpos[joint] = self.random.uniform(-.2, .2)
+        #quat = self.random.randn(4)
+        #physics.named.data.qpos['root'][3:7] = quat / np.linalg.norm(quat)
+        #for joint in physics.gen.joints:
+        #    physics.named.data.qpos[joint] = self.random.uniform(-.2, .2)
     
     def get_observation(self, physics):
         obs = collections.OrderedDict()
@@ -297,19 +316,21 @@ class Avoid(base.Task):
         return obs
     
     def get_reward(self, physics):
-        offset_norm = rewards.tolerance(np.linalg.norm(physics.offset()))
-        return offset_norm
+        offset_norm = np.linalg.norm(physics.offset())
+        energy_penalty = np.linalg.norm(physics.joint_velocities())
+        #print("physics offset: {0}\noffset_norm: {1}".format(physics.offset(), offset_norm))
+        return offset_norm - energy_penalty ** 2
     
 
 
-# In[98]:
+# In[ ]:
 
 
 '''_DEFAULT_TIME_LIMIT = 4
 _CONTROL_TIMESTEP = .04'''
 
 
-# In[99]:
+# In[ ]:
 
 
 
@@ -356,7 +377,7 @@ for i in range(counts):
 
 
 
-# In[100]:
+# In[ ]:
 
 
 '''if(os.path.isfile('tomo.mp4')):
