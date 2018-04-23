@@ -9,7 +9,7 @@
 		<motor ctrllimited="true" ctrlrange="-1 1" />
 		<general ctrllimited="true" />
 		<default class="dust">
-			<joint armature=".01" damping=".2" range="-60 60" solimplimit="0 .99 .01" stiffness=".6" type="hinge" />
+			<joint armature=".01" damping=".2" limited="true" range="-60 60" solimplimit="0 .99 .01" stiffness=".6" type="hinge" />
 			<geom friction=".7" solimp=".95 .99 .003" solref=".015 1" />
 		</default>
 	</default>
@@ -20,53 +20,231 @@
 			<light diffuse=".6 .6 .6" dir="0 0 -1" mode="track" name="light" pos="0 0 0.5" specular=".3 .3 .3" />
 			<joint damping="0" limited="false" name="root" type="free" />
 			<geom name="root" size="0.025 0.025 0.025" type="box" />
-			<body name="3" pos="0.0 0.0 0.0" quat="-0.5234913841085711 0.7902578683106048 0.28128732084231806 -0.1494212684681198">
-				<joint axis="1 0 0" name="3_x" range="-7.827448645876974 7.827448645876974" />
-				<joint axis="0 1 0" name="3_y" range="-7.827448645876974 7.827448645876974" />
-				<joint axis="0 0 1" name="3_z" range="-7.827448645876974 7.827448645876974" />
-				<geom name="3" pos="0.13947276988238744 0.0 0.0" size="0.13947276988238744 0.04258753045254567 0.04258753045254567" type="ellipsoid" />
-				<body name="2" pos="0.2789455397647749 0.0 0.0" quat="0.5398115174916923 -0.669065941637827 0.1521647226645651 -0.48764760688433634">
-					<joint axis="1 0 0" name="2_x" range="-132.4283365973835 132.4283365973835" />
-					<joint axis="0 1 0" name="2_y" range="-132.4283365973835 132.4283365973835" />
-					<joint axis="0 0 1" name="2_z" range="-132.4283365973835 132.4283365973835" />
-					<geom name="2" pos="0.08557368314490302 0.0 0.0" size="0.08557368314490302 0.023738892838671945 0.023738892838671945" type="ellipsoid" />
+			<camera name="root_camera" pos="0.05 0 0" xyaxes="1 0 0 0 1 0" />
+			<body name="19" pos="0.0 0.0 0.0" quat="-0.11816304851428083 -0.18361907895094837 0.8574214172697999 -0.46599360619869523">
+				<joint axis="1 0 0" name="19_x" range="-155.60403271314655 155.60403271314655" />
+				<joint axis="0 1 0" name="19_y" range="-155.60403271314655 155.60403271314655" />
+				<joint axis="0 0 1" name="19_z" range="-155.60403271314655 155.60403271314655" />
+				<geom name="19" pos="0.14138648026250625 0.0 0.0" size="0.14138648026250625 0.026063243373047044 0.026063243373047044" type="ellipsoid" />
+				<body name="5" pos="0.2827729605250125 0.0 0.0" quat="0.08261714131245854 0.5153767559355658 0.8244377386114136 0.21877756410561788">
+					<joint axis="1 0 0" name="5_x" range="-6.0520010643005335 6.0520010643005335" />
+					<joint axis="0 1 0" name="5_y" range="-6.0520010643005335 6.0520010643005335" />
+					<joint axis="0 0 1" name="5_z" range="-6.0520010643005335 6.0520010643005335" />
+					<geom name="5" pos="0.08049863359458287 0.0 0.0" size="0.08049863359458287 0.03465038706423544 0.03465038706423544" type="ellipsoid" />
+					<body name="6" pos="0.16099726718916574 0.0 0.0" quat="-0.7219018162737372 0.32814252524036464 0.3731921508293781 0.48156813572837087">
+						<joint axis="1 0 0" name="6_x" range="-117.27175881319434 117.27175881319434" />
+						<joint axis="0 1 0" name="6_y" range="-117.27175881319434 117.27175881319434" />
+						<joint axis="0 0 1" name="6_z" range="-117.27175881319434 117.27175881319434" />
+						<geom name="6" pos="0.06325242708053457 0.0 0.0" size="0.06325242708053457 0.020715292749049322 0.020715292749049322" type="ellipsoid" />
+						<site name="6" pos="0.12650485416106913 0.0 0.0" size="0.02" />
+					</body>
+					<body name="8" pos="0.16099726718916574 0.0 0.0" quat="-0.4118480250120726 -0.6529436516631866 0.6212280741326561 0.13461601671357465">
+						<joint axis="1 0 0" name="8_x" range="-97.1647828526116 97.1647828526116" />
+						<joint axis="0 1 0" name="8_y" range="-97.1647828526116 97.1647828526116" />
+						<joint axis="0 0 1" name="8_z" range="-97.1647828526116 97.1647828526116" />
+						<geom name="8" pos="0.1462497887904265 0.0 0.0" size="0.1462497887904265 0.03001733133120744 0.03001733133120744" type="ellipsoid" />
+						<body name="7" pos="0.292499577580853 0.0 0.0" quat="-0.26414608217120206 -0.6933014247349287 -0.6668868381031814 0.06944009575788045">
+							<joint axis="1 0 0" name="7_x" range="-96.77809668355471 96.77809668355471" />
+							<joint axis="0 1 0" name="7_y" range="-96.77809668355471 96.77809668355471" />
+							<joint axis="0 0 1" name="7_z" range="-96.77809668355471 96.77809668355471" />
+							<geom name="7" pos="0.0789297356936178 0.0 0.0" size="0.0789297356936178 0.024467037116150354 0.024467037116150354" type="ellipsoid" />
+							<site name="7" pos="0.1578594713872356 0.0 0.0" size="0.02" />
+						</body>
+					</body>
+					<body name="9" pos="0.16099726718916574 0.0 0.0" quat="-0.33635436378312566 0.11198490479424977 0.052195645552735113 -0.9335955964161383">
+						<joint axis="1 0 0" name="9_x" range="-149.39401437199885 149.39401437199885" />
+						<joint axis="0 1 0" name="9_y" range="-149.39401437199885 149.39401437199885" />
+						<joint axis="0 0 1" name="9_z" range="-149.39401437199885 149.39401437199885" />
+						<geom name="9" pos="0.10636327816765287 0.0 0.0" size="0.10636327816765287 0.01825677881558593 0.01825677881558593" type="ellipsoid" />
+						<site name="9" pos="0.21272655633530574 0.0 0.0" size="0.02" />
+					</body>
+					<body name="11" pos="0.16099726718916574 0.0 0.0" quat="-0.7495713498899643 0.271237262781424 -0.41665394486397916 0.43700415207668436">
+						<joint axis="1 0 0" name="11_x" range="-119.17521001126063 119.17521001126063" />
+						<joint axis="0 1 0" name="11_y" range="-119.17521001126063 119.17521001126063" />
+						<joint axis="0 0 1" name="11_z" range="-119.17521001126063 119.17521001126063" />
+						<geom name="11" pos="0.09392593715969244 0.0 0.0" size="0.09392593715969244 0.04002875485541962 0.04002875485541962" type="ellipsoid" />
+						<body name="10" pos="0.18785187431938488 0.0 0.0" quat="0.5342113097010496 0.42025418902835654 -0.03940777513804712 -0.7324286452960976">
+							<joint axis="1 0 0" name="10_x" range="-56.419679071757656 56.419679071757656" />
+							<joint axis="0 1 0" name="10_y" range="-56.419679071757656 56.419679071757656" />
+							<joint axis="0 0 1" name="10_z" range="-56.419679071757656 56.419679071757656" />
+							<geom name="10" pos="0.08852363508236825 0.0 0.0" size="0.08852363508236825 0.028228066330753487 0.028228066330753487" type="ellipsoid" />
+							<site name="10" pos="0.1770472701647365 0.0 0.0" size="0.02" />
+						</body>
+						<body name="14" pos="0.18785187431938488 0.0 0.0" quat="-0.05957551027368717 0.9706921452351922 -0.23249962403785618 0.012306200737268094">
+							<joint axis="1 0 0" name="14_x" range="-121.73654575347845 121.73654575347845" />
+							<joint axis="0 1 0" name="14_y" range="-121.73654575347845 121.73654575347845" />
+							<joint axis="0 0 1" name="14_z" range="-121.73654575347845 121.73654575347845" />
+							<geom name="14" pos="0.10414527764807942 0.0 0.0" size="0.10414527764807942 0.018254584078158182 0.018254584078158182" type="ellipsoid" />
+							<body name="13" pos="0.20829055529615884 0.0 0.0" quat="0.5131921660439299 0.581154257184764 -0.6313832240710479 -0.015771950697794662">
+								<joint axis="1 0 0" name="13_x" range="-79.91874624254125 79.91874624254125" />
+								<joint axis="0 1 0" name="13_y" range="-79.91874624254125 79.91874624254125" />
+								<joint axis="0 0 1" name="13_z" range="-79.91874624254125 79.91874624254125" />
+								<geom name="13" pos="0.14895651296580237 0.0 0.0" size="0.14895651296580237 0.03322369076727626 0.03322369076727626" type="ellipsoid" />
+								<body name="12" pos="0.29791302593160474 0.0 0.0" quat="0.658785432248979 -0.5375926072781696 -0.5207105829262493 -0.07652732639385326">
+									<joint axis="1 0 0" name="12_x" range="-135.30176413275987 135.30176413275987" />
+									<joint axis="0 1 0" name="12_y" range="-135.30176413275987 135.30176413275987" />
+									<joint axis="0 0 1" name="12_z" range="-135.30176413275987 135.30176413275987" />
+									<geom name="12" pos="0.06458079212127608 0.0 0.0" size="0.06458079212127608 0.0109136638985704 0.0109136638985704" type="ellipsoid" />
+									<site name="12" pos="0.12916158424255217 0.0 0.0" size="0.02" />
+								</body>
+							</body>
+						</body>
+						<body name="17" pos="0.18785187431938488 0.0 0.0" quat="-0.4673721529896641 -0.2645917988770935 0.8414678855808457 0.05904445878226298">
+							<joint axis="1 0 0" name="17_x" range="-21.616615187350405 21.616615187350405" />
+							<joint axis="0 1 0" name="17_y" range="-21.616615187350405 21.616615187350405" />
+							<joint axis="0 0 1" name="17_z" range="-21.616615187350405 21.616615187350405" />
+							<geom name="17" pos="0.10071577668198176 0.0 0.0" size="0.10071577668198176 0.024072988642717886 0.024072988642717886" type="ellipsoid" />
+							<body name="18" pos="0.2014315533639635 0.0 0.0" quat="-0.8056737470325659 -0.5640862925622585 0.09141254394839285 0.15601350805220066">
+								<joint axis="1 0 0" name="18_x" range="-129.94279199723746 129.94279199723746" />
+								<joint axis="0 1 0" name="18_y" range="-129.94279199723746 129.94279199723746" />
+								<joint axis="0 0 1" name="18_z" range="-129.94279199723746 129.94279199723746" />
+								<geom name="18" pos="0.13717834367425014 0.0 0.0" size="0.13717834367425014 0.026350685253640052 0.026350685253640052" type="ellipsoid" />
+								<site name="18" pos="0.27435668734850027 0.0 0.0" size="0.02" />
+							</body>
+							<body name="16" pos="0.2014315533639635 0.0 0.0" quat="0.8894599266599322 0.30231459874246935 0.0483806130627249 -0.33930257666714353">
+								<joint axis="1 0 0" name="16_x" range="-151.59926896525118 151.59926896525118" />
+								<joint axis="0 1 0" name="16_y" range="-151.59926896525118 151.59926896525118" />
+								<joint axis="0 0 1" name="16_z" range="-151.59926896525118 151.59926896525118" />
+								<geom name="16" pos="0.1427077249011035 0.0 0.0" size="0.1427077249011035 0.03666894740179746 0.03666894740179746" type="ellipsoid" />
+								<body name="15" pos="0.285415449802207 0.0 0.0" quat="0.25257378771086725 0.6345503861455403 -0.45868893671246647 0.5684687753443618">
+									<joint axis="1 0 0" name="15_x" range="-45.516889785386304 45.516889785386304" />
+									<joint axis="0 1 0" name="15_y" range="-45.516889785386304 45.516889785386304" />
+									<joint axis="0 0 1" name="15_z" range="-45.516889785386304 45.516889785386304" />
+									<geom name="15" pos="0.08028046313752923 0.0 0.0" size="0.08028046313752923 0.014501308228247575 0.014501308228247575" type="ellipsoid" />
+									<site name="15" pos="0.16056092627505847 0.0 0.0" size="0.02" />
+								</body>
+							</body>
+						</body>
+					</body>
 				</body>
-				<body name="1" pos="0.2789455397647749 0.0 0.0" quat="0.42850073128283483 -0.757374020531164 0.42805014571751765 -0.2440180097159791">
-					<joint axis="1 0 0" name="1_x" range="-123.06697263005813 123.06697263005813" />
-					<joint axis="0 1 0" name="1_y" range="-123.06697263005813 123.06697263005813" />
-					<joint axis="0 0 1" name="1_z" range="-123.06697263005813 123.06697263005813" />
-					<geom name="1" pos="0.10650255536341147 0.0 0.0" size="0.10650255536341147 0.022721122539307623 0.022721122539307623" type="ellipsoid" />
-					<body name="0" pos="0.21300511072682293 0.0 0.0" quat="-0.04227718964160315 -0.027585612556598804 0.8119490864056469 0.5815413607826363">
-						<joint axis="1 0 0" name="0_x" range="-122.22214031125333 122.22214031125333" />
-						<joint axis="0 1 0" name="0_y" range="-122.22214031125333 122.22214031125333" />
-						<joint axis="0 0 1" name="0_z" range="-122.22214031125333 122.22214031125333" />
-						<geom name="0" pos="0.08741068491238566 0.0 0.0" size="0.08741068491238566 0.0147086741462358 0.0147086741462358" type="ellipsoid" />
+				<body name="2" pos="0.2827729605250125 0.0 0.0" quat="-0.0892699856928689 0.1361554471772926 -0.9186715624501047 0.3599098834483847">
+					<joint axis="1 0 0" name="2_x" range="-45.852412537311494 45.852412537311494" />
+					<joint axis="0 1 0" name="2_y" range="-45.852412537311494 45.852412537311494" />
+					<joint axis="0 0 1" name="2_z" range="-45.852412537311494 45.852412537311494" />
+					<geom name="2" pos="0.06143452048066789 0.0 0.0" size="0.06143452048066789 0.015805522339262353 0.015805522339262353" type="ellipsoid" />
+					<body name="3" pos="0.12286904096133577 0.0 0.0" quat="-0.13625149955655444 -0.5104120507383769 -0.7141571556780828 -0.4592326472752402">
+						<joint axis="1 0 0" name="3_x" range="-170.3179316033747 170.3179316033747" />
+						<joint axis="0 1 0" name="3_y" range="-170.3179316033747 170.3179316033747" />
+						<geom name="3" pos="0.0692112886715053 0.0 0.0" size="0.0692112886715053 0.013287380563236277 0.013287380563236277" type="ellipsoid" />
+						<site name="3" pos="0.1384225773430106 0.0 0.0" size="0.02" />
+					</body>
+					<body name="0" pos="0.12286904096133577 0.0 0.0" quat="-0.1137620422378125 -0.5251643624081983 0.663604422212074 0.5204707110134555">
+						<geom name="0" pos="0.10459340428564134 0.0 0.0" size="0.10459340428564134 0.023462826059523958 0.023462826059523958" type="ellipsoid" />
+						<body name="1" pos="0.2091868085712827 0.0 0.0" quat="-0.765225841488399 0.40628323974798203 -0.4990706543326278 -0.017082815993217287">
+							<geom name="1" pos="0.1256698590221314 0.0 0.0" size="0.1256698590221314 0.05240456277433672 0.05240456277433672" type="ellipsoid" />
+						</body>
+					</body>
+					<body name="4" pos="0.12286904096133577 0.0 0.0" quat="0.9654174095777471 -0.11776303609133132 0.2325632695405231 -0.003926611180922579">
+						<geom name="4" pos="0.09374145774876548 0.0 0.0" size="0.09374145774876548 0.016388328799618563 0.016388328799618563" type="ellipsoid" />
 					</body>
 				</body>
 			</body>
 		</body>
+		<body name="target" pos="-0.2620332260306386 -0.5900335066984574 0.08671374252151487">
+			<geom material="target" name="target" pos="0 0 0" size="0.02 0.02 0.02" type="box" />
+		</body>
 	</worldbody>
 	<contact>
-		<exclude body1="3" body2="2" />
-		<exclude body1="1" body2="0" />
-		<exclude body1="root" body2="0" />
-		<exclude body1="root" body2="2" />
-		<exclude body1="root" body2="1" />
-		<exclude body1="3" body2="1" />
+		<exclude body1="root" body2="18" />
+		<exclude body1="14" body2="13" />
+		<exclude body1="root" body2="14" />
 		<exclude body1="root" body2="3" />
+		<exclude body1="5" body2="9" />
+		<exclude body1="root" body2="12" />
+		<exclude body1="19" body2="5" />
+		<exclude body1="root" body2="19" />
+		<exclude body1="root" body2="9" />
+		<exclude body1="11" body2="10" />
+		<exclude body1="root" body2="16" />
+		<exclude body1="root" body2="8" />
+		<exclude body1="2" body2="0" />
+		<exclude body1="root" body2="11" />
+		<exclude body1="root" body2="0" />
+		<exclude body1="0" body2="1" />
+		<exclude body1="root" body2="13" />
+		<exclude body1="root" body2="1" />
+		<exclude body1="root" body2="7" />
+		<exclude body1="root" body2="10" />
+		<exclude body1="17" body2="18" />
+		<exclude body1="2" body2="4" />
+		<exclude body1="8" body2="7" />
+		<exclude body1="root" body2="2" />
+		<exclude body1="11" body2="14" />
+		<exclude body1="root" body2="15" />
+		<exclude body1="2" body2="3" />
+		<exclude body1="5" body2="8" />
+		<exclude body1="19" body2="2" />
+		<exclude body1="13" body2="12" />
+		<exclude body1="16" body2="15" />
+		<exclude body1="11" body2="17" />
+		<exclude body1="5" body2="6" />
+		<exclude body1="root" body2="17" />
+		<exclude body1="17" body2="16" />
+		<exclude body1="root" body2="5" />
+		<exclude body1="root" body2="4" />
+		<exclude body1="5" body2="11" />
+		<exclude body1="root" body2="6" />
 	</contact>
 	<actuator>
-		<motor gear="2" joint="1_z" name="1_z" />
-		<motor gear="2" joint="0_x" name="0_x" />
-		<motor gear="2" joint="3_x" name="3_x" />
-		<motor gear="2" joint="2_y" name="2_y" />
-		<motor gear="2" joint="2_x" name="2_x" />
-		<motor gear="2" joint="0_z" name="0_z" />
+		<motor gear="2" joint="8_y" name="8_y" />
+		<motor gear="2" joint="14_x" name="14_x" />
+		<motor gear="2" joint="15_z" name="15_z" />
 		<motor gear="2" joint="3_y" name="3_y" />
+		<motor gear="2" joint="6_y" name="6_y" />
+		<motor gear="2" joint="9_y" name="9_y" />
+		<motor gear="2" joint="19_y" name="19_y" />
+		<motor gear="2" joint="19_x" name="19_x" />
+		<motor gear="2" joint="9_z" name="9_z" />
+		<motor gear="2" joint="15_y" name="15_y" />
+		<motor gear="2" joint="19_z" name="19_z" />
+		<motor gear="2" joint="6_x" name="6_x" />
+		<motor gear="2" joint="3_x" name="3_x" />
+		<motor gear="2" joint="16_y" name="16_y" />
+		<motor gear="2" joint="10_x" name="10_x" />
+		<motor gear="2" joint="9_x" name="9_x" />
+		<motor gear="2" joint="14_z" name="14_z" />
+		<motor gear="2" joint="15_x" name="15_x" />
+		<motor gear="2" joint="12_y" name="12_y" />
+		<motor gear="2" joint="17_z" name="17_z" />
+		<motor gear="2" joint="16_x" name="16_x" />
+		<motor gear="2" joint="7_x" name="7_x" />
+		<motor gear="2" joint="7_z" name="7_z" />
+		<motor gear="2" joint="10_z" name="10_z" />
+		<motor gear="2" joint="13_x" name="13_x" />
+		<motor gear="2" joint="8_x" name="8_x" />
+		<motor gear="2" joint="2_x" name="2_x" />
+		<motor gear="2" joint="2_y" name="2_y" />
+		<motor gear="2" joint="18_z" name="18_z" />
+		<motor gear="2" joint="11_z" name="11_z" />
+		<motor gear="2" joint="17_y" name="17_y" />
+		<motor gear="2" joint="16_z" name="16_z" />
+		<motor gear="2" joint="8_z" name="8_z" />
+		<motor gear="2" joint="5_z" name="5_z" />
+		<motor gear="2" joint="7_y" name="7_y" />
+		<motor gear="2" joint="12_x" name="12_x" />
+		<motor gear="2" joint="14_y" name="14_y" />
+		<motor gear="2" joint="13_z" name="13_z" />
+		<motor gear="2" joint="6_z" name="6_z" />
+		<motor gear="2" joint="11_y" name="11_y" />
 		<motor gear="2" joint="2_z" name="2_z" />
-		<motor gear="2" joint="1_x" name="1_x" />
-		<motor gear="2" joint="0_y" name="0_y" />
-		<motor gear="2" joint="1_y" name="1_y" />
-		<motor gear="2" joint="3_z" name="3_z" />
+		<motor gear="2" joint="17_x" name="17_x" />
+		<motor gear="2" joint="18_x" name="18_x" />
+		<motor gear="2" joint="10_y" name="10_y" />
+		<motor gear="2" joint="11_x" name="11_x" />
+		<motor gear="2" joint="12_z" name="12_z" />
+		<motor gear="2" joint="5_y" name="5_y" />
+		<motor gear="2" joint="18_y" name="18_y" />
+		<motor gear="2" joint="13_y" name="13_y" />
+		<motor gear="2" joint="5_x" name="5_x" />
 	</actuator>
+	<sensor>
+		<touch name="18_sensor" site="18" />
+		<touch name="12_sensor" site="12" />
+		<touch name="15_sensor" site="15" />
+		<touch name="6_sensor" site="6" />
+		<touch name="7_sensor" site="7" />
+		<touch name="9_sensor" site="9" />
+		<touch name="3_sensor" site="3" />
+		<touch name="10_sensor" site="10" />
+	</sensor>
 </mujoco>

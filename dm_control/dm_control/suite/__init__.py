@@ -42,7 +42,7 @@ from dm_control.suite import reacher
 from dm_control.suite import stacker
 from dm_control.suite import swimmer
 from dm_control.suite import walker
-from dm_control.suite import wobble
+from dm_control.suite import findtarget
 
 # Find all domains imported.
 _DOMAINS = {name: module for name, module in locals().items()
