@@ -7,20 +7,21 @@ from keras import backend as K
 from keras.callbacks import EarlyStopping
 
 Z_DIM = 32
-ACTION_DIM = 3
+ACTION_DIM = 30
 
 HIDDEN_UNITS = 256
 GAUSSIAN_MIXTURES = 5
 
-BATCH_SIZE =32
+BATCH_SIZE = 1
 EPOCHS = 20
 
 def get_mixture_coef(y_pred):
     
     d = GAUSSIAN_MIXTURES * Z_DIM
-    
+
     rollout_length = K.shape(y_pred)[1]
     
+
     pi = y_pred[:,:,:d]
     mu = y_pred[:,:,d:(2*d)]
     log_sigma = y_pred[:,:,(2*d):(3*d)]

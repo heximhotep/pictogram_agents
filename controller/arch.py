@@ -3,8 +3,14 @@ from collections import namedtuple
 
 TIME_FACTOR = 0
 NOISE_BIAS = 0
-OUTPUT_NOISE = [False, False, False]
-OUTPUT_SIZE = 3
+OUTPUT_NOISE = [False] * 30
+OUTPUT_SIZE = 30
+
+
+
+
+
+
 
 def activations(a):
   a = np.tanh(a)

@@ -3,7 +3,6 @@
 import numpy as np
 import random
 import config
-#import matplotlib.pyplot as plt
 
 from env import make_env
 
@@ -36,27 +35,26 @@ def main(args):
 
             # plt.imshow(observation)
             # plt.show()
-
-            env.render()
             done = False
             action = env.action_space.sample()
             t = 0
             obs_sequence = []
             action_sequence = []
-
             while t < time_steps: #and not done:
                 t = t + 1
-                
-                action = config.generate_data_action(t, action)
-                
-                obs_sequence.append(observation)
+                action = config.generate_data_action(env)
+                eye = env.dmcenv.physics.render(64, 64, camera_id='tracking_top')
+
+                obs_sequence.append(eye)
+                #eye = eye.flatten()
                 action_sequence.append(action)
 
                 observation, reward, done, info = env.step(action)
-                observation = config.adjust_obs(observation)
-
-                if render:
-                    env.render()
+                #observation = np.append(observation, eye)
+                #observation = config.adjust_obs(observation)
+                #observation
+                #if render:
+                #    env.render()
 
             obs_data.append(obs_sequence)
             action_data.append(action_sequence)

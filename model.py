@@ -153,6 +153,7 @@ class Model:
     self.cell_values = np.zeros(self.rnn.hidden_units) 
 
   def update(self, obs, t):
+    print (np.array([obs]))
     vae_encoded_obs = self.vae.encoder.predict(np.array([obs]))[0]
     return vae_encoded_obs
 
@@ -184,7 +185,6 @@ def simulate(model, train_mode=False, render_mode=True, num_episode=5, seed=-1, 
   if max_len > 0:
     if max_len < max_episode_length:
       max_episode_length = max_len
-
   if (seed >= 0):
     random.seed(seed)
     np.random.seed(seed)
@@ -195,7 +195,8 @@ def simulate(model, train_mode=False, render_mode=True, num_episode=5, seed=-1, 
     model.reset()
 
     obs = model.env.reset()
-    obs = config.adjust_obs(obs)
+    obs = np.zeros((64, 64, 3))
+    #obs = config.adjust_obs(obs)
     action = model.env.action_space.sample()
 
     model.env.render("human")
@@ -280,7 +281,6 @@ def main(args):
     model.env.seed(the_seed)
 
     for i in range(100):
-
       reward, steps_taken = simulate(model, train_mode=False, render_mode=False, num_episode=1, max_len = max_length, generate_data_mode = False)
       total_reward += reward[0]
       print("episode" , i, "reward =", reward[0])
