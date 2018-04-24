@@ -24,13 +24,13 @@ eval_steps = 25 # evaluate every N_eval steps
 retrain_mode = True
 cap_time_mode = True
 
-num_worker = 8
+num_worker = 1
 num_worker_trial = 16
 
 population = num_worker * num_worker_trial
 
 env_name = 'invalid_env_name'
-optimizer = 'cma'
+optimizer = 'ses'
 antithetic = True
 batch_mode = 'mean'
 

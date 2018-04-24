@@ -1,6 +1,9 @@
 import math
 import numpy as np
 
+import os
+os.environ['CUDA_VISIBLE_DEVICES'] = '1'
+
 from keras.layers import Input, LSTM, Dense
 from keras.models import Model
 from keras import backend as K
@@ -9,12 +12,11 @@ from keras.callbacks import EarlyStopping
 Z_DIM = 32
 ACTION_DIM = 30
 
-HIDDEN_UNITS = 256
-GAUSSIAN_MIXTURES = 5
+HIDDEN_UNITS = 128
+GAUSSIAN_MIXTURES = 2
 
 BATCH_SIZE = 1
 EPOCHS = 20
-
 def get_mixture_coef(y_pred):
     
     d = GAUSSIAN_MIXTURES * Z_DIM

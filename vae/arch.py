@@ -1,5 +1,8 @@
 import numpy as np
 
+import os
+os.environ['CUDA_VISIBLE_DEVICES'] = '1'
+
 from keras.layers import Input, Conv2D, Flatten, Dense, Conv2DTranspose, Lambda, Reshape
 from keras.models import Model
 from keras import backend as K
