@@ -1,0 +1,114 @@
+<mujoco model="starfish">
+    <compiler inertiafromgeom="true" angle="degree"/>
+	<include file="./common/visual.xml" />
+	<include file="./common/materials.xml" />
+	<asset>
+		<texture builtin="gradient" height="800" mark="random" markrgb="1 1 1" name="skybox" rgb1=".4 .6 .8" rgb2="0 0 0" type="skybox" width="800" />
+	</asset>
+	<!--Viscosity:: water:0.000894, air:0.00001983 -->
+	<!--Density:: water:1000, air:1.2 -->
+	<!--option timestep="0.001" viscosity="0.000894" density="1000" /-->
+	<default>
+		<motor ctrllimited="true" ctrlrange="-1 1" />
+		<general ctrllimited="true" />
+		<default class="starfish">
+			<joint armature=".01" damping=".2" range="-60 60" solimplimit="0 .99 .01" stiffness=".6" type="hinge" />
+			<geom friction=".7" solimp=".95 .99 .003" solref=".015 1" />
+		</default>
+	</default>
+	<worldbody>
+		<camera mode="fixed" name="tracking_top" pos="0 -2 2" euler="50.0 0.0 0.0" />
+		<geom material="grid" name="ground" size="3 3 1" type="plane" />
+		<body childclass="starfish" name="root" pos="0 0 1.0">
+			<light diffuse=".6 .6 .6" dir="0 0 -1" mode="track" name="light" pos="0 0 1.5" specular=".3 .3 .3" />
+			<geom name="root" size="0.05" type="sphere" />
+			<body name="left_arm_1" pos="0.2 0.0 0.0" euler="0.0 90.0 90.0">
+				<joint axis="1 0 0" name="l0_x" range="-10.5 10.5" />
+				<joint axis="0 1 0" name="l0_y" range="-10.5 10.5" />
+				<joint axis="0 0 1" name="l0_z" range="-10.5 10.5" />
+				<geom name="left_arm_1" pos="0.0 0.0 0.0" size="0.04 0.08 0.04" rgba="0 0 1 1" type="cylinder" />
+				<body name="left_arm_2" pos="0.0 0.0 0.207" euler="0.0 0.0 0.0">
+                    <joint axis="1 0 0" name="l1_x" range="-10.5 10.5" />
+                    <joint axis="0 1 0" name="l1_y" range="-10.5 10.5" />
+                    <joint axis="0 0 1" name="l1_z" range="-10.5 10.5" />
+					<geom name="left_arm_2" pos="0.0 0.0 0.07" size="0.03 0.08 0.03" rgba="1 0 0 1" type="cylinder" />
+				</body>
+			</body>
+			<body name="right_arm_1" pos="-0.2 0.0 0.0" euler="0.0 -90.0 90.0">
+				<joint axis="1 0 0" name="r0_x" range="-10.5 10.5" />
+				<joint axis="0 1 0" name="r0_y" range="-10.5 10.5" />
+				<joint axis="0 0 1" name="r0_z" range="-10.5 10.5" />
+				<geom name="right_arm_1" pos="0.0 0.0 0.0" size="0.04 0.08 0.04" rgba="0 0 1 1" type="cylinder" />
+				<body name="right_arm_2" pos="0.0 0.0 0.207" euler="0.0 0.0 0.0">
+                    <joint axis="1 0 0" name="r1_x" range="-10.5 10.5" />
+                    <joint axis="0 1 0" name="r1_y" range="-10.5 10.5" />
+                    <joint axis="0 0 1" name="r1_z" range="-10.5 10.5" />
+					<geom name="right_arm_2" pos="0.0 0.0 0.07" size="0.03 0.08 0.03" rgba="1 0 0 1" type="cylinder" />
+				</body>
+			</body>
+			<body name="front_arm_1" pos="0.0 0.2 0.0" euler="-90.0 0.0 0.0">
+				<joint axis="1 0 0" name="f0_x" range="-10.5 10.5" />
+				<joint axis="0 1 0" name="f0_y" range="-10.5 10.5" />
+				<joint axis="0 0 1" name="f0_z" range="-10.5 10.5" />
+				<geom name="front_arm_1" pos="0.0 0.0 0.0" size="0.04 0.08 0.04" rgba="1 1 1 1" type="cylinder" />
+				<body name="front_arm_2" pos="0.0 0.0 0.207" euler="0.0 0.0 0.0">
+                    <joint axis="1 0 0" name="f1_x" range="-10.5 10.5" />
+                    <joint axis="0 1 0" name="f1_y" range="-10.5 10.5" />
+                    <joint axis="0 0 1" name="f1_z" range="-10.5 10.5" />
+					<geom name="front_arm_2" pos="0.0 0.0 0.07" size="0.03 0.08 0.03" rgba="1 0 1 1" type="cylinder" />
+                    <body name="camera_arm" pos="0.0 0.0 0.15" euler="0.0 180.0 0.0">
+                        <camera mode="fixed" name="arm_eye" pos="0 0 0" />
+                    </body>
+                </body>
+			</body>
+			<body name="back_arm_1" pos="0.0 -0.2 0.0" euler="90.0 0.0 0.0">
+				<joint axis="1 0 0" name="b0_x" range="-10.5 10.5" />
+				<joint axis="0 1 0" name="b0_y" range="-10.5 10.5" />
+				<joint axis="0 0 1" name="b0_z" range="-10.5 10.5" />
+				<geom name="back_arm_1" pos="0.0 0.0 0.0" size="0.04 0.08 0.04" rgba="0 0 1 1" type="cylinder" />
+				<body name="back_arm_2" pos="0.0 0.0 0.207" euler="0.0 0.0 0.0">
+                    <joint axis="1 0 0" name="b1_x" range="-10.5 10.5" />
+                    <joint axis="0 1 0" name="b1_y" range="-10.5 10.5" />
+                    <joint axis="0 0 1" name="b1_z" range="-10.5 10.5" />
+					<geom name="back_arm_2" pos="0.0 0.0 0.07" size="0.03 0.08 0.03" rgba="1 0 0 1" type="cylinder" />
+				</body>
+			</body>
+		</body>
+	</worldbody>
+	<contact>
+		<exclude body1="root" body2="left_arm_1" />
+		<exclude body1="left_arm_1" body2="left_arm_2" />
+		<exclude body1="root" body2="right_arm_1" />
+		<exclude body1="right_arm_1" body2="right_arm_2" />
+		<exclude body1="root" body2="front_arm_1" />
+		<exclude body1="front_arm_1" body2="front_arm_2" />
+		<exclude body1="root" body2="back_arm_1" />
+		<exclude body1="back_arm_1" body2="back_arm_2" />
+	</contact>
+	<actuator>
+		<motor gear="1" joint="l0_x" name="l0_x" />
+		<motor gear="1" joint="l0_y" name="l0_y" />
+		<motor gear="1" joint="l0_z" name="l0_z" />
+        <motor gear="1" joint="l1_x" name="l1_x" />
+		<motor gear="1" joint="l1_y" name="l1_y" />
+		<motor gear="1" joint="l1_z" name="l1_z" />
+		<motor gear="1" joint="r0_x" name="r0_x" />
+		<motor gear="1" joint="r0_y" name="r0_y" />
+		<motor gear="1" joint="r0_z" name="r0_z" />
+        <motor gear="1" joint="r1_x" name="r1_x" />
+		<motor gear="1" joint="r1_y" name="r1_y" />
+		<motor gear="1" joint="r1_z" name="r1_z" />
+		<motor gear="1" joint="b0_x" name="b0_x" />
+		<motor gear="1" joint="b0_y" name="b0_y" />
+		<motor gear="1" joint="b0_z" name="b0_z" />
+        <motor gear="1" joint="b1_x" name="b1_x" />
+		<motor gear="1" joint="b1_y" name="b1_y" />
+		<motor gear="1" joint="b1_z" name="b1_z" />
+		<motor gear="1" joint="f0_x" name="f0_x" />
+		<motor gear="1" joint="f0_y" name="f0_y" />
+		<motor gear="1" joint="f0_z" name="f0_z" />
+        <motor gear="1" joint="f1_x" name="f1_x" />
+		<motor gear="1" joint="f1_y" name="f1_y" />
+		<motor gear="1" joint="f1_z" name="f1_z" />
+    </actuator>
+</mujoco>
