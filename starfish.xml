@@ -23,36 +23,36 @@
 		<body childclass="starfish" name="root" pos="0 0 1.0">
 			<light diffuse=".6 .6 .6" dir="0 0 -1" mode="track" name="light" pos="0 0 1.5" specular=".3 .3 .3" />
 			<geom name="root" size="0.05" type="sphere" />
-			<body name="left_arm_1" pos="0.2 0.0 0.0" euler="0.0 90.0 90.0">
+			<body name="left_arm_1" pos="0.15 0.0 0.0" euler="0.0 90.0 90.0">
 				<joint axis="1 0 0" name="l0_x" range="-10.5 10.5" />
 				<joint axis="0 1 0" name="l0_y" range="-10.5 10.5" />
 				<joint axis="0 0 1" name="l0_z" range="-10.5 10.5" />
 				<geom name="left_arm_1" pos="0.0 0.0 0.0" size="0.04 0.08 0.04" rgba="0 0 1 1" type="cylinder" />
-				<body name="left_arm_2" pos="0.0 0.0 0.207" euler="0.0 0.0 0.0">
+				<body name="left_arm_2" pos="0.0 0.0 0.07" euler="0.0 0.0 0.0">
                     <joint axis="1 0 0" name="l1_x" range="-10.5 10.5" />
                     <joint axis="0 1 0" name="l1_y" range="-10.5 10.5" />
                     <joint axis="0 0 1" name="l1_z" range="-10.5 10.5" />
 					<geom name="left_arm_2" pos="0.0 0.0 0.07" size="0.03 0.08 0.03" rgba="1 0 0 1" type="cylinder" />
 				</body>
 			</body>
-			<body name="right_arm_1" pos="-0.2 0.0 0.0" euler="0.0 -90.0 90.0">
+			<body name="right_arm_1" pos="-0.15 0.0 0.0" euler="0.0 -90.0 90.0">
 				<joint axis="1 0 0" name="r0_x" range="-10.5 10.5" />
 				<joint axis="0 1 0" name="r0_y" range="-10.5 10.5" />
 				<joint axis="0 0 1" name="r0_z" range="-10.5 10.5" />
 				<geom name="right_arm_1" pos="0.0 0.0 0.0" size="0.04 0.08 0.04" rgba="0 0 1 1" type="cylinder" />
-				<body name="right_arm_2" pos="0.0 0.0 0.207" euler="0.0 0.0 0.0">
+				<body name="right_arm_2" pos="0.0 0.0 0.07" euler="0.0 0.0 0.0">
                     <joint axis="1 0 0" name="r1_x" range="-10.5 10.5" />
                     <joint axis="0 1 0" name="r1_y" range="-10.5 10.5" />
                     <joint axis="0 0 1" name="r1_z" range="-10.5 10.5" />
 					<geom name="right_arm_2" pos="0.0 0.0 0.07" size="0.03 0.08 0.03" rgba="1 0 0 1" type="cylinder" />
 				</body>
 			</body>
-			<body name="front_arm_1" pos="0.0 0.2 0.0" euler="-90.0 0.0 0.0">
+			<body name="front_arm_1" pos="0.0 0.15 0.0" euler="-90.0 0.0 0.0">
 				<joint axis="1 0 0" name="f0_x" range="-10.5 10.5" />
 				<joint axis="0 1 0" name="f0_y" range="-10.5 10.5" />
 				<joint axis="0 0 1" name="f0_z" range="-10.5 10.5" />
 				<geom name="front_arm_1" pos="0.0 0.0 0.0" size="0.04 0.08 0.04" rgba="1 1 1 1" type="cylinder" />
-				<body name="front_arm_2" pos="0.0 0.0 0.207" euler="0.0 0.0 0.0">
+				<body name="front_arm_2" pos="0.0 0.0 0.07" euler="0.0 0.0 0.0">
                     <joint axis="1 0 0" name="f1_x" range="-10.5 10.5" />
                     <joint axis="0 1 0" name="f1_y" range="-10.5 10.5" />
                     <joint axis="0 0 1" name="f1_z" range="-10.5 10.5" />
@@ -60,12 +60,12 @@
                     <camera mode="fixed" name="arm_eye" pos="0 0 0.06" euler="180.0 0.0 0.0" />
                 </body>
 			</body>
-			<body name="back_arm_1" pos="0.0 -0.2 0.0" euler="90.0 0.0 0.0">
+			<body name="back_arm_1" pos="0.0 -0.15 0.0" euler="90.0 0.0 0.0">
 				<joint axis="1 0 0" name="b0_x" range="-10.5 10.5" />
 				<joint axis="0 1 0" name="b0_y" range="-10.5 10.5" />
 				<joint axis="0 0 1" name="b0_z" range="-10.5 10.5" />
 				<geom name="back_arm_1" pos="0.0 0.0 0.0" size="0.04 0.08 0.04" rgba="0 0 1 1" type="cylinder" />
-				<body name="back_arm_2" pos="0.0 0.0 0.207" euler="0.0 0.0 0.0">
+				<body name="back_arm_2" pos="0.0 0.0 0.07" euler="0.0 0.0 0.0">
                     <joint axis="1 0 0" name="b1_x" range="-10.5 10.5" />
                     <joint axis="0 1 0" name="b1_y" range="-10.5 10.5" />
                     <joint axis="0 0 1" name="b1_z" range="-10.5 10.5" />
