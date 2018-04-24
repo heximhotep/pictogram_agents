@@ -7,17 +7,18 @@
 	</asset>
 	<!--Viscosity:: water:0.000894, air:0.00001983 -->
 	<!--Density:: water:1000, air:1.2 -->
-	<!--option timestep="0.001" viscosity="0.000894" density="1000" /-->
+	<option gravity="0 0 0" timestep="0.04" viscosity="0.2" density="6000" />
 	<default>
 		<motor ctrllimited="true" ctrlrange="-1 1" />
 		<general ctrllimited="true" />
 		<default class="starfish">
-			<joint armature=".01" damping=".2" range="-60 60" solimplimit="0 .99 .01" stiffness=".6" type="hinge" />
+			<joint armature=".01" damping=".2" range="-10.5 10.5" solimplimit="0 .99 .01" stiffness=".6" type="hinge" />
 			<geom friction=".7" solimp=".95 .99 .003" solref=".015 1" />
 		</default>
 	</default>
 	<worldbody>
 		<camera mode="fixed" name="tracking_top" pos="0 -2 2" euler="50.0 0.0 0.0" />
+		<!--camera mode="fixed" name="arm_eye" pos="0 -2 2" euler="50.0 0.0 0.0" /-->
 		<geom material="grid" name="ground" size="3 3 1" type="plane" />
 		<body childclass="starfish" name="root" pos="0 0 1.0">
 			<light diffuse=".6 .6 .6" dir="0 0 -1" mode="track" name="light" pos="0 0 1.5" specular=".3 .3 .3" />
@@ -56,9 +57,7 @@
                     <joint axis="0 1 0" name="f1_y" range="-10.5 10.5" />
                     <joint axis="0 0 1" name="f1_z" range="-10.5 10.5" />
 					<geom name="front_arm_2" pos="0.0 0.0 0.07" size="0.03 0.08 0.03" rgba="1 0 1 1" type="cylinder" />
-                    <body name="camera_arm" pos="0.0 0.0 0.15" euler="0.0 180.0 0.0">
-                        <camera mode="fixed" name="arm_eye" pos="0 0 0" />
-                    </body>
+                    <camera mode="fixed" name="arm_eye" pos="0 0 0.06" euler="180.0 0.0 0.0" />
                 </body>
 			</body>
 			<body name="back_arm_1" pos="0.0 -0.2 0.0" euler="90.0 0.0 0.0">
