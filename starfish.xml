@@ -7,7 +7,7 @@
 	</asset>
 	<!--Viscosity:: water:0.000894, air:0.00001983 -->
 	<!--Density:: water:1000, air:1.2 -->
-	<option gravity="0 0 0" timestep="0.04" viscosity="0.2" density="6000" />
+	<option gravity="0 0 -0.1" timestep="0.04" viscosity="0.2" density="6000" />
 	<default>
 		<motor ctrllimited="true" ctrlrange="-1 1" />
 		<general ctrllimited="true" />
@@ -22,7 +22,8 @@
 		<geom material="grid" name="ground" size="3 3 1" type="plane" />
 		<body childclass="starfish" name="root" pos="0 0 1.0">
 			<light diffuse=".6 .6 .6" dir="0 0 -1" mode="track" name="light" pos="0 0 1.5" specular=".3 .3 .3" />
-			<geom name="root" size="0.05" type="sphere" />
+            <joint damping="0" limited="false" name="root" type="free" />
+            <geom name="root" size="0.05" type="sphere" />
 			<body name="left_arm_1" pos="0.15 0.0 0.0" euler="0.0 90.0 90.0">
 				<joint axis="1 0 0" name="l0_x" range="-10.5 10.5" />
 				<joint axis="0 1 0" name="l0_y" range="-10.5 10.5" />
