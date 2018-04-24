@@ -30,11 +30,14 @@ from skimage import io, transform
 # In[117]:
 
 
+
 class Genesis():
     def __init__(self, max_joints=50, max_sites=8, max_cameras=2):
+        self.roots = set()
         self.joints = set()
         self.geoms = set()
         self.sites = set()
+        self.sensors = set()
         self.cameras = set()
         self.bodies = set()
         self.neighbors = set()
@@ -45,7 +48,24 @@ class Genesis():
         self.joint_range = [5, 180]
         self.dimension_range = [0.06, 0.16]
         self.name_counter = 0
-        
+    
+    def extract_elements(self, root, elt):
+        result = set([x.get('name') for x in root.findall(".//{}".format(elt))])
+        result = set([x for x in result if not (x == None or x == 'root')])
+        return result
+
+    def from_xml(self, path):
+        tree = ET.parse(path)
+        root = tree.getroot()
+        print (self.extract_elements(root, 'joint'))
+        self.roots = set(['root'])
+        self.joints = self.extract_elements(root, 'joint')
+        self.geoms = self.extract_elements(root, 'geom')
+        self.sites = self.extract_elements(root, 'site')
+        self.sensors = self.extract_elements(root, 'touch')
+        self.cameras = self.extract_elements(root, 'camera')
+        self.bodies = self.extract_elements(root, 'body')
+
     def norm_val(self, x, _range):
         result = _range[1] - _range[0]
         result *= x
@@ -80,19 +100,25 @@ class Genesis():
         self.geoms.add(_name)
         return result
     
-    def mk_site(self, parent, _name, size):
+    def mk_site(self, parent, _name, size = 0.02, pos=[0, 0, 0]):
         if len(self.sites) >= self.max_sites:
             return None
         result = ET.SubElement(parent, 'site', name=_name, size=str(size))
+        result.set('pos', '{0} {1} {2}'.format(pos[0], pos[1], pos[2]))
         self.sites.add(_name)
         return result
-    
-    def mk_camera(parent, _name, pos, xaxis, yaxis):
+
+    def mk_sensor(self, parent, _type, _name, _site):
+        result = ET.SubElement(parent, _type, name=_name, site=_site)
+        self.sensors.add(result)
+        return result
+
+    def mk_camera(self, parent, _name, pos=[0, 0, 0], xaxis=[1, 0, 0], yaxis=[0, 1, 0], mode='fixed'):
         if len(self.cameras) >= self.max_cameras:
             return None
         result = ET.SubElement(parent, 'camera', name=_name)
         result.set('pos','{0} {1} {2}'.format(pos[0], pos[1], pos[2]))
-        result.set('xyaxis','{0} {1} {2} {3} {4} {5}'.format(xaxis[0], xaxis[1], xaxis[2],
+        result.set('xyaxes','{0} {1} {2} {3} {4} {5}'.format(xaxis[0], xaxis[1], xaxis[2],
                                                              yaxis[0], yaxis[1], yaxis[2]))
         self.cameras.add(_name)
         return result
@@ -105,10 +131,10 @@ class Genesis():
             result.set('quat', '{0} {1} {2} {3}'.format(quat[0], quat[1], quat[2], quat[3]))
         self.bodies.add(_name)
         return result
-    
-    def mk_root(self, parent):
+
+    def mk_root(self, parent, name='root'):
         self.__init__()
-        result = ET.SubElement(parent, 'body', name='root')
+        result = ET.SubElement(parent, 'body', name=name)
         result.set('pos', '0 0 0.8')
         result.set('childclass', 'dust')
         light = ET.SubElement(result, 'light', name='light', diffuse='.6 .6 .6')
@@ -116,10 +142,13 @@ class Genesis():
         light.set('dir', '0 0 -1')
         light.set('specular', '.3 .3 .3')
         light.set('mode', 'track')
-        root_joint = ET.SubElement(result, 'joint', name='root', damping='0', limited='false')
+        root_joint = ET.SubElement(result, 'joint', name=name, damping='0', limited='false')
         root_joint.set('type','free')
         root_shape = [0.025] * 3
         root_geom = self.mk_geom(result, 'root', 'box', root_shape)
+        root_camera = self.mk_camera(result, "{0}_camera".format(name),
+            pos=[root_shape[0] * 2, 0, 0])
+        self.roots.add(result)
         return result
 
     def mk_defaults(self, parent):
@@ -133,6 +162,7 @@ class Genesis():
         def_joint.set('range', '-60 60')
         def_joint.set('damping', '.2')
         def_joint.set('stiffness', '.6')
+        def_joint.set('limited', 'true')
         def_joint.set('armature', '.01')
         def_joint.set('solimplimit', '0 .99 .01')
         
@@ -140,12 +170,13 @@ class Genesis():
         def_geom.set("friction", ".7")
         def_geom.set("solimp", ".95 .99 .003")
         def_geom.set("solref", ".015 1")
+        def_geom.set("material", "corn")
         return result
 
     def mk_worldbody(self, parent):
         result = ET.SubElement(parent, 'worldbody')
         ET.SubElement(result, 'camera', name='tracking_top', pos='0 0 4', xyaxes='1 0 0 0 1 0', mode='trackcom')
-        ground = ET.SubElement(result, 'geom', name='ground', size='.5 .5 .1', material='grid')
+        ground = ET.SubElement(result, 'geom', name='ground', size='.5 .5 .1', material='elon')
         ground.set('type','plane')
         return result
     
@@ -165,7 +196,7 @@ class Genesis():
         self.mk_joint(result, name + '_z', [0, 0, 1], _range=joint_range)
         this_pos = np.array([dimensions[0], 0, 0])
         self.mk_geom(result, name, 'ellipsoid', dimensions, pos=this_pos)
-        
+
         self.neighbors.add((parent.get('name'), _args['name']))
         self.neighbors.add(('root', _args['name']))
         return result, np.array([dimensions[0] * 2, 0, 0])
@@ -176,17 +207,29 @@ class Genesis():
         result.set('gear', gear)
         return result
 
+    def mk_sensors(self, parent):
+        result = ET.SubElement(parent, 'sensor')
+        for site in self.sites:
+            sensorname = "{}_sensor".format(site)
+            self.mk_sensor(result, "touch", sensorname, site)
+        return result
+
     def mk_actuators(self, parent):
         result = ET.SubElement(parent, 'actuator')
         for joint in self.joints:
             self.mk_actuator_position(result, joint, joint)
         return result
-    
+
     def mk_morphology(self, parent, _args):
         result, offset = self.mk_segment(parent, _args)
-        for childArgs in _args['children']:
-            childArgs['offset'] = offset
-            child = self.mk_morphology(result, childArgs)
+        if len(_args['children']) == 0:
+            sitename = "{0}".format(_args['name'])
+            sensorname = "{0}_sensor".format(_args['name'])
+            nu_site = self.mk_site(result, sitename, pos=offset)
+        else:
+            for childArgs in _args['children']:
+                childArgs['offset'] = offset
+                child = self.mk_morphology(result, childArgs)
         return result
     
     def mk_leaf(self):
@@ -226,29 +269,6 @@ class Genesis():
         else:
             B['children'].append(A)
             return B
-    
-    '''def mk_morphology(self, parent, _name, offset, curjoints=0):
-        aname = '{0}_trunk'.format(_name)
-        initjoints = curjoints
-        #offset = np.zeros(3)
-        result, offset = self.mk_segment(parent, aname, offset)
-        exit = False
-        idx = 0
-        if(len(aname) > 30):
-            return result
-        while(not exit):
-            roll = np.random.rand(1)
-            nuname = '{0}_trunk_{1}'.format(_name, idx)
-            idx+=1
-            if(roll < 0.7 / ((curjoints + 1) / 3)):
-                #print("morph branch")
-                print("morph branch offset is {0}".format(offset))
-                curjoints += 1
-                self.mk_morphology(result, nuname, offset, curjoints=curjoints / 2)
-                #print(_)
-            else:
-                exit = True
-        return result, offset'''
 
     def mk_model(self, creation): 
         result = ET.Element('mujoco', model='dust')
@@ -263,17 +283,16 @@ class Genesis():
         defaults = self.mk_defaults(result)
         worldbody = self.mk_worldbody(result)
         base_dust = self.mk_root(worldbody)
-        #print("about to make morph!")
-        #print(creation)
+        targetpos = np.random.rand(3) * np.array([2, 2, 0.1])
+        targetpos -= np.array([1, 1, 0])
+        target = self.mk_body(worldbody, "target", pos=targetpos)
+        target_geom = self.mk_geom(target, "target", "box", pos=[0, 0, 0], size=[0.02, 0.02, 0.02])
+        target_geom.set("material", "target")
         seggy = self.mk_morphology(base_dust, creation)
-        #seggy = self.mk_morphology(base_dust, 'necron', [0,0,0])
         self.mk_exceptions(result)
         self.mk_actuators(result)
+        self.mk_sensors(result)
         return result
-
-
-# In[113]:
-
 
 def prettify(elem):
         """Return a pretty-printed XML string for the Element.
@@ -282,107 +301,6 @@ def prettify(elem):
         reparsed = minidom.parseString(rough_string)
         return reparsed.toprettyxml(indent="\t")
 
-
-# In[116]:
-
-
 def get_model_and_assets():
     curpath = os.getcwd()
     return common.read_model(curpath + '/dust.xml'), common.ASSETS
-
-class Physics(mujoco.Physics):
-    def offset(self):
-        return self.named.data.geom_xpos['root']
-    def joint_velocities(self):
-        #print(list(self.gen.joints))
-        return self.named.data.qvel[list(self.gen.joints)]
-    def set_gen(self, gen):
-        self.gen = gen
-
-class Avoid(base.Task):
-    def __init__(self, random=None):
-        super(Avoid, self).__init__(random=random)
-
-    def initialize_episode(self, physics):
-        """Sets the state of the environment at the start of each episode."""
-        #quat = self.random.randn(4)
-        #physics.named.data.qpos['root'][3:7] = quat / np.linalg.norm(quat)
-        #for joint in physics.gen.joints:
-        #    physics.named.data.qpos[joint] = self.random.uniform(-.2, .2)
-    
-    def get_observation(self, physics):
-        obs = collections.OrderedDict()
-        obs['offset'] = physics.offset()
-        return obs
-    
-    def get_reward(self, physics):
-        offset_norm = np.linalg.norm(physics.offset())
-        energy_penalty = np.linalg.norm(physics.joint_velocities())
-        #print("physics offset: {0}\noffset_norm: {1}".format(physics.offset(), offset_norm))
-        return offset_norm - energy_penalty ** 2
-    
-
-
-# In[ ]:
-
-
-'''_DEFAULT_TIME_LIMIT = 4
-_CONTROL_TIMESTEP = .04'''
-
-
-# In[ ]:
-
-
-
-'''display_stride = 1 / .04 // 24
-counts = 10
-picidx = 0
-imnames = set()
-for i in range(counts):
-    thisgen = Genesis()
-    tree = ET.fromstring(prettify(thisgen.mk_model()))
-    tree = ET.ElementTree(tree)
-    tree.write('dust.xml')
-
-    genesis_physics = Physics.from_xml_string(*get_model_and_assets())
-    genesis_physics.set_gen(thisgen)
-    genesis_task = Avoid()
-    genesis_env = control.Environment(genesis_physics, genesis_task, control_timestep=_CONTROL_TIMESTEP, time_limit=_DEFAULT_TIME_LIMIT)
-
-    action_spec = genesis_env.action_spec()
-    observation_spec = genesis_env.observation_spec()
-
-    idx = 0
-    
-    time_step = genesis_env.reset()
-    action_bs = np.random.rand(action_spec.shape[0]) * 2 * 3.14
-    curtime = 0
-    while(not time_step.last()):
-        try:
-            action = np.sin(action_bs + curtime)
-            time_step = genesis_env.step(action)
-            curtime += _CONTROL_TIMESTEP
-            if idx % display_stride == 0:
-                #clear_output()
-                #print(type(genesis_env.physics.render(480, 640)))                                                                                                                                                                                                                                                                                                                                                                                   (genesis_env.physics.render(480, 640)).reshape(480, 640, 3)
-                savename = "seq_{1:04}.jpg".format(i, picidx)
-                imnames.add(savename)
-                picidx += 1
-                #print(savename)
-                io.imsave(savename, genesis_env.physics.render(480, 640))
-            idx += 1
-        except PhysicsError:
-            print('except')
-            break'''
-
-
-
-# In[ ]:
-
-
-'''if(os.path.isfile('tomo.mp4')):
-    os.remove('tomo.mp4')
-!!ffmpeg -f image2 -pattern_type sequence -i "seq_%4d.jpg" -qscale:v 0 tomo.mp4
-for name in imnames:
-    os.remove(name)'''
-
