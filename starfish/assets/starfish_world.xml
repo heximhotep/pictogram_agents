@@ -1,0 +1,30 @@
+<mujoco>
+    <compiler inertiafromgeom="true" angle="degree"/>
+	<include file="./common/visual.xml" />
+	<include file="./common/materials.xml" />
+    <asset>
+		<texture builtin="gradient" height="800" mark="random" markrgb="1 1 1" name="skybox" rgb1=".4 .6 .8" rgb2="0 0 0" type="skybox" width="800" />
+	</asset>
+	<!--Viscosity:: water:0.000894, air:0.00001983 -->
+	<!--Density:: water:1000, air:1.2 -->
+	<option gravity="0 0 -0.1" timestep="0.04" viscosity="0.001" density="6000" />
+	<default>
+		<motor ctrllimited="true" ctrlrange="-1 1" />
+		<general ctrllimited="true" />
+		<default class="starfish">
+			<joint armature=".01" damping=".2" range="-30.5 30.5" solimplimit="0 .99 .01" stiffness=".6" type="hinge" />
+			<geom friction=".7" solimp=".95 .99 .003" solref=".015 1" />
+		</default>
+	</default>
+	<worldbody>
+		<camera mode="fixed" name="tracking_top" pos="0 -2 2" euler="50.0 0.0 0.0"/>
+		<geom material="grid" name="ground" size="3 3 1" type="plane" />
+        
+        <body name="target" pos="-0.5025618217921284 -0.30252641539177194 0.009889796273572816">
+			<geom material="target" name="target" pos="0 0 0" size="0.02 0.02 0.02" type="box" />
+		</body>
+
+        
+		<include file="./starfish_body.xml" />
+    </worldbody>
+</mujoco>
