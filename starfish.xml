@@ -20,6 +20,9 @@
 		<camera mode="fixed" name="tracking_top" pos="0 -2 2" euler="50.0 0.0 0.0" />
 		<!--camera mode="fixed" name="arm_eye" pos="0 -2 2" euler="50.0 0.0 0.0" /-->
 		<geom material="grid" name="ground" size="3 3 1" type="plane" />
+		<body name="target" pos="0 0 0">
+			<geom material="target" name="target" pos="0 0 0" size="0.05 0.05 0.05" type="box" />
+		</body>
 		<body childclass="starfish" name="root" pos="0 0 1.0">
 			<light diffuse=".6 .6 .6" dir="0 0 -1" mode="track" name="light" pos="0 0 1.5" specular=".3 .3 .3" />
             <joint damping="0" limited="false" name="root" type="free" />

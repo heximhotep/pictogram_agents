@@ -176,7 +176,7 @@ class Genesis():
     def mk_worldbody(self, parent):
         result = ET.SubElement(parent, 'worldbody')
         ET.SubElement(result, 'camera', name='tracking_top', pos='0 0 4', xyaxes='1 0 0 0 1 0', mode='trackcom')
-        ground = ET.SubElement(result, 'geom', name='ground', size='.5 .5 .1', material='elon')
+        ground = ET.SubElement(result, 'geom', name='ground', size='1 1 .1', material='elon')
         ground.set('type','plane')
         return result
     
