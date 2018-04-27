@@ -7,7 +7,7 @@
 	</asset>
 	<!--Viscosity:: water:0.000894, air:0.00001983 -->
 	<!--Density:: water:1000, air:1.2 -->
-	<option gravity="0 0 -0.1" timestep="0.04" viscosity="0.001" density="6000" />
+	<option gravity="0 0 -0.1" timestep="0.04" viscosity="0.1" density="4000" />
 	<default>
 		<motor ctrllimited="true" ctrlrange="-1 1" />
 		<general ctrllimited="true" />
@@ -17,7 +17,7 @@
 		</default>
 	</default>
 	<worldbody>
-		<camera mode="fixed" name="tracking_top" pos="0 -2 2" euler="50.0 0.0 0.0" />
+		<camera mode="trackcom" target="agent0/root" name="tracking_top" pos="0 -2 2" euler="50.0 0.0 0.0" />
 		<!--camera mode="fixed" name="arm_eye" pos="0 -2 2" euler="50.0 0.0 0.0" /-->
 		<geom material="grid" name="ground" size="3 3 1" type="plane" />
 
@@ -76,7 +76,7 @@
         </body>
 
 
-        <body name="target" pos="-0.5025618217921284 -0.30252641539177194 0.009889796273572816">
+    <body name="target" pos="-0.5025618217921284 -0.30252641539177194 0.009889796273572816">
 			<geom material="target" name="target" pos="0 0 0" size="0.02 0.02 0.02" type="box" />
 		</body>
 	</worldbody>

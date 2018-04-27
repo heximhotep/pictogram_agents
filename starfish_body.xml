@@ -1,0 +1,94 @@
+
+<worldbody>
+  <body childclass="starfish" name="agent0/root" pos="0 0 1.0">
+    <joint damping="0" limited="false" name="agent0/root/free" type="free"/>
+    <geom name="agent0/root" rgba="1 0 0 1" size="0.05" type="sphere"/>
+    <body euler="0.0 0.0 90.0" name="agent0/left_arm" pos="0 0 0">
+      <geom name="agent0/left_arm" pos="0.48 0.0 0.0" rgba="0.9333333333333333 0.8313725490196079 0.9411764705882353 1.0" size="0.3 0.1 0.015" type="box"/>
+      <joint axis="1 0 0" name="agent0/left_arm_x" pos="0 0 0"/>
+      <joint axis="0 1 0" name="agent0/left_arm_y" pos="0 0 0"/>
+      <joint axis="0 0 1" name="agent0/left_arm_z" pos="0 0 0"/>
+      <body euler="0.0 0.0 0.0" name="agent0/left_arm/tip" pos="0.80 0.0 0.0">
+        <geom name="agent0/left_arm/tip" pos="0.3 0.0 0.0" rgba="0.3843137254901961 0.14901960784313725 0.8549019607843137 1.0" size="0.3 0.05 0.01" type="box"/>
+        <joint axis="1 0 0" name="agent0/left_arm/tip_x"/>
+        <joint axis="0 1 0" name="agent0/left_arm/tip_y"/>
+        <joint axis="0 0 1" name="agent0/left_arm/tip_z"/>
+      </body>
+    </body>
+    <body euler="0.0 0.0 -90.0" name="agent0/right_arm" pos="0 0 0">
+      <geom name="agent0/right_arm" pos="0.48 0.0 0.0" rgba="0.9333333333333333 0.8313725490196079 0.9411764705882353 1.0" size="0.3 0.1 0.015" type="box"/>
+      <joint axis="1 0 0" name="agent0/right_arm_x" pos="0 0 0"/>
+      <joint axis="0 1 0" name="agent0/right_arm_y" pos="0 0 0"/>
+      <joint axis="0 0 1" name="agent0/right_arm_z" pos="0 0 0"/>
+      <body euler="0.0 0.0 0.0" name="agent0/right_arm/tip" pos="0.80 0.0 0.0">
+        <geom name="agent0/right_arm/tip" pos="0.3 0.0 0.0" rgba="0.3843137254901961 0.14901960784313725 0.8549019607843137 1.0" size="0.3 0.05 0.01" type="box"/>
+        <joint axis="1 0 0" name="agent0/right_arm/tip_x"/>
+        <joint axis="0 1 0" name="agent0/right_arm/tip_y"/>
+        <joint axis="0 0 1" name="agent0/right_arm/tip_z"/>
+      </body>
+    </body>
+    <body euler="0.0 0.0 180.0" name="agent0/front_arm" pos="0 0 0">
+      <geom name="agent0/front_arm" pos="0.48 0.0 0.0" rgba="0.9333333333333333 0.8313725490196079 0.9411764705882353 1.0" size="0.3 0.1 0.015" type="box"/>
+      <joint axis="1 0 0" name="agent0/front_arm_x" pos="0 0 0"/>
+      <joint axis="0 1 0" name="agent0/front_arm_y" pos="0 0 0"/>
+      <joint axis="0 0 1" name="agent0/front_arm_z" pos="0 0 0"/>
+      <body euler="0.0 0.0 0.0" name="agent0/front_arm/tip" pos="0.80 0.0 0.0">
+        <geom name="agent0/front_arm/tip" pos="0.3 0.0 0.0" rgba="0.3843137254901961 0.14901960784313725 0.8549019607843137 1.0" size="0.3 0.05 0.01" type="box"/>
+        <joint axis="1 0 0" name="agent0/front_arm/tip_x"/>
+        <joint axis="0 1 0" name="agent0/front_arm/tip_y"/>
+        <joint axis="0 0 1" name="agent0/front_arm/tip_z"/>
+        <camera euler="180.0 0.0 0.0" mode="fixed" name="arm_eye" pos="0 0 0.06"/>
+      </body>
+    </body>
+    <body euler="0.0 0.0 0.0" name="agent0/back_arm" pos="0 0 0">
+      <geom name="agent0/back_arm" pos="0.48 0.0 0.0" rgba="0.9333333333333333 0.8313725490196079 0.9411764705882353 1.0" size="0.3 0.1 0.015" type="box"/>
+      <joint axis="1 0 0" name="agent0/back_arm_x" pos="0 0 0"/>
+      <joint axis="0 1 0" name="agent0/back_arm_y" pos="0 0 0"/>
+      <joint axis="0 0 1" name="agent0/back_arm_z" pos="0 0 0"/>
+      <body euler="0.0 0.0 0.0" name="agent0/back_arm/tip" pos="0.80 0.0 0.0">
+        <geom name="agent0/back_arm/tip" pos="0.3 0.0 0.0" rgba="0.3843137254901961 0.14901960784313725 0.8549019607843137 1.0" size="0.3 0.05 0.01" type="box"/>
+        <joint axis="1 0 0" name="agent0/back_arm/tip_x"/>
+        <joint axis="0 1 0" name="agent0/back_arm/tip_y"/>
+        <joint axis="0 0 1" name="agent0/back_arm/tip_z"/>
+      </body>
+    </body>
+  </body>
+</worldbody>
+
+<contact>
+  <exclude body1="agent0/root" body2="agent0/left_arm"/>
+  <exclude body1="agent0/left_arm" body2="agent0/left_arm/tip"/>
+  <exclude body1="agent0/root" body2="agent0/right_arm"/>
+  <exclude body1="agent0/right_arm" body2="agent0/right_arm/tip"/>
+  <exclude body1="agent0/root" body2="agent0/front_arm"/>
+  <exclude body1="agent0/front_arm" body2="agent0/front_arm/tip"/>
+  <exclude body1="agent0/root" body2="agent0/back_arm"/>
+  <exclude body1="agent0/back_arm" body2="agent0/back_arm/tip"/>
+</contact>
+
+<actuator>
+  <motor gear="1" joint="agent0/left_arm_x" name="agent0/left_arm_x"/>
+  <motor gear="1" joint="agent0/left_arm_y" name="agent0/left_arm_y"/>
+  <motor gear="1" joint="agent0/left_arm_z" name="agent0/left_arm_z"/>
+  <motor gear="1" joint="agent0/left_arm/tip_x" name="agent0/left_arm/tip_x"/>
+  <motor gear="1" joint="agent0/left_arm/tip_y" name="agent0/left_arm/tip_y"/>
+  <motor gear="1" joint="agent0/left_arm/tip_z" name="agent0/left_arm/tip_z"/>
+  <motor gear="1" joint="agent0/right_arm_x" name="agent0/right_arm_x"/>
+  <motor gear="1" joint="agent0/right_arm_y" name="agent0/right_arm_y"/>
+  <motor gear="1" joint="agent0/right_arm_z" name="agent0/right_arm_z"/>
+  <motor gear="1" joint="agent0/right_arm/tip_x" name="agent0/right_arm/tip_x"/>
+  <motor gear="1" joint="agent0/right_arm/tip_y" name="agent0/right_arm/tip_y"/>
+  <motor gear="1" joint="agent0/right_arm/tip_z" name="agent0/right_arm/tip_z"/>
+  <motor gear="1" joint="agent0/front_arm_x" name="agent0/front_arm_x"/>
+  <motor gear="1" joint="agent0/front_arm_y" name="agent0/front_arm_y"/>
+  <motor gear="1" joint="agent0/front_arm_z" name="agent0/front_arm_z"/>
+  <motor gear="1" joint="agent0/front_arm/tip_x" name="agent0/front_arm/tip_x"/>
+  <motor gear="1" joint="agent0/front_arm/tip_y" name="agent0/front_arm/tip_y"/>
+  <motor gear="1" joint="agent0/front_arm/tip_z" name="agent0/front_arm/tip_z"/>
+  <motor gear="1" joint="agent0/back_arm_x" name="agent0/back_arm_x"/>
+  <motor gear="1" joint="agent0/back_arm_y" name="agent0/back_arm_y"/>
+  <motor gear="1" joint="agent0/back_arm_z" name="agent0/back_arm_z"/>
+  <motor gear="1" joint="agent0/back_arm/tip_x" name="agent0/back_arm/tip_x"/>
+  <motor gear="1" joint="agent0/back_arm/tip_y" name="agent0/back_arm/tip_y"/>
+  <motor gear="1" joint="agent0/back_arm/tip_z" name="agent0/back_arm/tip_z"/>
+</actuator>
