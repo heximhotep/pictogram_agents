@@ -3,34 +3,31 @@
 import argparse
 from baselines.common.cmd_util import mujoco_arg_parser
 from baselines import bench, logger
-import dm_control.suite
-import gym
+
+import sys
+sys.path.append('/home/studio/Documents/aman/pictogram_agents')
 import starfish
 
+from baselines.common import set_global_seeds
+from baselines.common.vec_env.vec_normalize import VecNormalize
+from baselines.ppo2 import ppo2
+from baselines.ppo2.policies import MlpPolicy, MlpLstmPolicy
+import gym
+import tensorflow as tf
+from baselines.common.vec_env.dummy_vec_env import DummyVecEnv
 
-def train(env_id, num_timesteps, seed):
-    from baselines.common import set_global_seeds
-    from baselines.common.vec_env.vec_normalize import VecNormalize
-    from baselines.ppo2 import ppo2
-    from baselines.ppo2.policies import MlpPolicy
-    import gym
-    import tensorflow as tf
-    from baselines.common.vec_env.dummy_vec_env import DummyVecEnv
+
+def train(env_id, num_timesteps, seed, load_path=False):
     ncpu = 1
     config = tf.ConfigProto(allow_soft_placement=True,
                             intra_op_parallelism_threads=ncpu,
                             inter_op_parallelism_threads=ncpu)
     tf.Session(config=config).__enter__()
     def make_env():
-        if env_id != "starfish":
-            env = gym.make(env_id)
-        else:
-            env = dm_control2gym.make(domain_name='findtarget', task_name='starfish_walk')
-            pdb.set_trace()
-            #env._max_episode_steps = 256
-
+        env = gym.make(env_id)
         env = bench.Monitor(env, logger.get_dir())
         return env
+    
     env = DummyVecEnv([make_env] * 12)
     env = VecNormalize(env)
 
@@ -42,15 +39,17 @@ def train(env_id, num_timesteps, seed):
         lr=3e-4,
         cliprange=0.2,
         total_timesteps=num_timesteps,
-        save_interval=20)
+        save_interval=20,
+        load_path=load_path)
 
 
 def main():
     parser = mujoco_arg_parser()
     parser.add_argument('--logdir')
+    parser.add_argument('--load-path', default=None)
     args = parser.parse_args()
     logger.configure(dir=args.logdir)
-    train(args.env, num_timesteps=args.num_timesteps, seed=args.seed)
+    train(args.env, num_timesteps=args.num_timesteps, seed=args.seed, load_path=args.load_path)
 
 
 if __name__ == '__main__':

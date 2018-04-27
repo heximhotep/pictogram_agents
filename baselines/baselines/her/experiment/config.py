@@ -3,23 +3,22 @@ import numpy as np
 import json
 import os
 import gym
+from gym.wrappers.time_limit import TimeLimit
 
 from baselines import logger
 from baselines.her.ddpg import DDPG
 from baselines.her.her import make_sample_her_transitions
 
-import dm_control.suite
-import findtarget
+import sys
+sys.path.append('/home/studio/Documents/aman/pictogram_agents/')
 
-dm_control.suite._DOMAINS['findtarget'] = findtarget
-
-import dm_control2gym
+import starfish
 
 DEFAULT_ENV_PARAMS = {
     'FetchReach-v1': {
         'n_cycles': 10,
     },
-    'starfish': {
+    'Starfish-FindTargetHER-v0': {
         'n_cycles': 10,
     },
 }
@@ -78,11 +77,9 @@ def prepare_params(kwargs):
 
     env_name = kwargs['env_name']
     def make_env():
-        if env_name == 'starfish':
-            env = dm_control2gym.make(domain_name='findtarget', task_name='starfish_walk')
-            env._max_episode_steps = 256
-            return env
-        return gym.make(env_name)
+        env = gym.make(env_name)
+        env = TimeLimit(env, max_episode_steps=500)
+        return env
     kwargs['make_env'] = make_env
     tmp_env = cached_make_env(kwargs['make_env'])
     assert hasattr(tmp_env, '_max_episode_steps')
@@ -170,9 +167,9 @@ def configure_dims(params):
     env.reset()
     obs, reward, term, info = env.step(env.action_space.sample())
     dims = {
-        'o': obs.shape[0],
+        'o': obs['observation'].shape[0],
         'u': env.action_space.shape[0],
-        'g': obs[24:27].shape[0],
+        'g': obs['desired_goal'].shape[0],
     }
     for key, value in info.items():
         value = np.array(value)

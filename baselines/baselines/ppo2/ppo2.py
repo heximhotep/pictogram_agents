@@ -156,7 +156,7 @@ def constfn(val):
 def learn(*, policy, env, nsteps, total_timesteps, ent_coef, lr,
             vf_coef=0.5,  max_grad_norm=0.5, gamma=0.99, lam=0.95,
             log_interval=10, nminibatches=4, noptepochs=4, cliprange=0.2,
-            save_interval=0):
+            save_interval=0, load_path=None):
 
     if isinstance(lr, float): lr = constfn(lr)
     else: assert callable(lr)
@@ -177,71 +177,79 @@ def learn(*, policy, env, nsteps, total_timesteps, ent_coef, lr,
         import cloudpickle
         with open(osp.join(logger.get_dir(), 'make_model.pkl'), 'wb') as fh:
             fh.write(cloudpickle.dumps(make_model))
-    model = make_model()
-    runner = Runner(env=env, model=model, nsteps=nsteps, gamma=gamma, lam=lam)
+    
+    config = tf.ConfigProto()
+    config.gpu_options.allow_growth = True
+    
+    with tf.Session(config=config).as_default():
 
-    epinfobuf = deque(maxlen=100)
-    tfirststart = time.time()
+        model = make_model()
+        if load_path is not None:
+            model.load(load_path)
+        runner = Runner(env=env, model=model, nsteps=nsteps, gamma=gamma, lam=lam)
 
-    nupdates = total_timesteps//nbatch
-    for update in range(1, nupdates+1):
-        assert nbatch % nminibatches == 0
-        nbatch_train = nbatch // nminibatches
-        tstart = time.time()
-        frac = 1.0 - (update - 1.0) / nupdates
-        lrnow = lr(frac)
-        cliprangenow = cliprange(frac)
-        obs, returns, masks, actions, values, neglogpacs, states, epinfos = runner.run() #pylint: disable=E0632
-        epinfobuf.extend(epinfos)
-        mblossvals = []
-        if states is None: # nonrecurrent version
-            inds = np.arange(nbatch)
-            for _ in range(noptepochs):
-                np.random.shuffle(inds)
-                for start in range(0, nbatch, nbatch_train):
-                    end = start + nbatch_train
-                    mbinds = inds[start:end]
-                    slices = (arr[mbinds] for arr in (obs, returns, masks, actions, values, neglogpacs))
-                    mblossvals.append(model.train(lrnow, cliprangenow, *slices))
-        else: # recurrent version
-            assert nenvs % nminibatches == 0
-            envsperbatch = nenvs // nminibatches
-            envinds = np.arange(nenvs)
-            flatinds = np.arange(nenvs * nsteps).reshape(nenvs, nsteps)
-            envsperbatch = nbatch_train // nsteps
-            for _ in range(noptepochs):
-                np.random.shuffle(envinds)
-                for start in range(0, nenvs, envsperbatch):
-                    end = start + envsperbatch
-                    mbenvinds = envinds[start:end]
-                    mbflatinds = flatinds[mbenvinds].ravel()
-                    slices = (arr[mbflatinds] for arr in (obs, returns, masks, actions, values, neglogpacs))
-                    mbstates = states[mbenvinds]
-                    mblossvals.append(model.train(lrnow, cliprangenow, *slices, mbstates))
+        epinfobuf = deque(maxlen=100)
+        tfirststart = time.time()
 
-        lossvals = np.mean(mblossvals, axis=0)
-        tnow = time.time()
-        fps = int(nbatch / (tnow - tstart))
-        if update % log_interval == 0 or update == 1:
-            ev = explained_variance(values, returns)
-            logger.logkv("serial_timesteps", update*nsteps)
-            logger.logkv("nupdates", update)
-            logger.logkv("total_timesteps", update*nbatch)
-            logger.logkv("fps", fps)
-            logger.logkv("explained_variance", float(ev))
-            logger.logkv('eprewmean', safemean([epinfo['r'] for epinfo in epinfobuf]))
-            logger.logkv('eplenmean', safemean([epinfo['l'] for epinfo in epinfobuf]))
-            logger.logkv('time_elapsed', tnow - tfirststart)
-            for (lossval, lossname) in zip(lossvals, model.loss_names):
-                logger.logkv(lossname, lossval)
-            logger.dumpkvs()
-        if save_interval and (update % save_interval == 0 or update == 1) and logger.get_dir():
-            checkdir = osp.join(logger.get_dir(), 'checkpoints')
-            os.makedirs(checkdir, exist_ok=True)
-            savepath = osp.join(checkdir, '%.5i'%update)
-            print('Saving to', savepath)
-            model.save(savepath)
-    env.close()
+        nupdates = total_timesteps//nbatch
+        for update in range(1, nupdates+1):
+            assert nbatch % nminibatches == 0
+            nbatch_train = nbatch // nminibatches
+            tstart = time.time()
+            frac = 1.0 - (update - 1.0) / nupdates
+            lrnow = lr(frac)
+            cliprangenow = cliprange(frac)
+            obs, returns, masks, actions, values, neglogpacs, states, epinfos = runner.run() #pylint: disable=E0632
+            epinfobuf.extend(epinfos)
+            mblossvals = []
+            if states is None: # nonrecurrent version
+                inds = np.arange(nbatch)
+                for _ in range(noptepochs):
+                    np.random.shuffle(inds)
+                    for start in range(0, nbatch, nbatch_train):
+                        end = start + nbatch_train
+                        mbinds = inds[start:end]
+                        slices = (arr[mbinds] for arr in (obs, returns, masks, actions, values, neglogpacs))
+                        mblossvals.append(model.train(lrnow, cliprangenow, *slices))
+            else: # recurrent version
+                assert nenvs % nminibatches == 0
+                envsperbatch = nenvs // nminibatches
+                envinds = np.arange(nenvs)
+                flatinds = np.arange(nenvs * nsteps).reshape(nenvs, nsteps)
+                envsperbatch = nbatch_train // nsteps
+                for _ in range(noptepochs):
+                    np.random.shuffle(envinds)
+                    for start in range(0, nenvs, envsperbatch):
+                        end = start + envsperbatch
+                        mbenvinds = envinds[start:end]
+                        mbflatinds = flatinds[mbenvinds].ravel()
+                        slices = (arr[mbflatinds] for arr in (obs, returns, masks, actions, values, neglogpacs))
+                        mbstates = states[mbenvinds]
+                        mblossvals.append(model.train(lrnow, cliprangenow, *slices, mbstates))
+
+            lossvals = np.mean(mblossvals, axis=0)
+            tnow = time.time()
+            fps = int(nbatch / (tnow - tstart))
+            if update % log_interval == 0 or update == 1:
+                ev = explained_variance(values, returns)
+                logger.logkv("serial_timesteps", update*nsteps)
+                logger.logkv("nupdates", update)
+                logger.logkv("total_timesteps", update*nbatch)
+                logger.logkv("fps", fps)
+                logger.logkv("explained_variance", float(ev))
+                logger.logkv('eprewmean', safemean([epinfo['r'] for epinfo in epinfobuf]))
+                logger.logkv('eplenmean', safemean([epinfo['l'] for epinfo in epinfobuf]))
+                logger.logkv('time_elapsed', tnow - tfirststart)
+                for (lossval, lossname) in zip(lossvals, model.loss_names):
+                    logger.logkv(lossname, lossval)
+                logger.dumpkvs()
+            if save_interval and (update % save_interval == 0 or update == 1) and logger.get_dir():
+                checkdir = osp.join(logger.get_dir(), 'checkpoints')
+                os.makedirs(checkdir, exist_ok=True)
+                savepath = osp.join(checkdir, '%.5i'%update)
+                print('Saving to', savepath)
+                model.save(savepath)
+        env.close()
 
 
 def run(*, load_path, policy, env, nsteps, total_timesteps, ent_coef, lr,
