@@ -1,0 +1,4 @@
+{
+    "python.pythonPath": "/home/studio/miniconda3/envs/py35/bin/python",
+    "python.linting.enabled": false
+}

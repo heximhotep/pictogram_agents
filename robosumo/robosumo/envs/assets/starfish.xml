@@ -1,0 +1,142 @@
+
+<agentbody>
+  <body childclass="starfish" name="torso" pos="0 0 1.0">
+    <joint damping="0" limited="false" name="torso/free" type="free"/>
+    <geom name="torso_geom" rgba="1 0 0 1" size="0.05" type="sphere"/>
+    <body euler="0.0 0.0 90.0" name="left_arm" pos="0 0 0">
+      <geom name="left_arm" pos="0.48 0.0 0.0" rgba="0.9333333333333333 0.8313725490196079 0.9411764705882353 1.0" size="0.3 0.1 0.015" type="box"/>
+      <joint axis="1 0 0" name="left_arm_x" pos="0 0 0"/>
+      <joint axis="0 1 0" name="left_arm_y" pos="0 0 0"/>
+      <joint axis="0 0 1" name="left_arm_z" pos="0 0 0"/>
+      <body euler="0.0 0.0 0.0" name="left_arm/tip" pos="0.80 0.0 .0">
+        <geom name="left_arm/tip" pos="0.3 0.0 0.0" rgba="0.3843137254901961 0.14901960784313725 0.8549019607843137 1.0" size="0.3 0.05 0.01" type="box"/>
+        <joint axis="1 0 0" name="left_arm/tip_x"/>
+        <joint axis="0 1 0" name="left_arm/tip_y"/>
+        <joint axis="0 0 1" name="left_arm/tip_z"/>
+      </body>
+    </body>
+    <body euler="0.0 0.0 -90.0" name="right_arm" pos="0 0 0">
+      <geom name="right_arm" pos="0.48 0.0 0.0" rgba="0.9333333333333333 0.8313725490196079 0.9411764705882353 1.0" size="0.3 0.1 0.015" type="box"/>
+      <joint axis="1 0 0" name="right_arm_x" pos="0 0 0"/>
+      <joint axis="0 1 0" name="right_arm_y" pos="0 0 0"/>
+      <joint axis="0 0 1" name="right_arm_z" pos="0 0 0"/>
+      <body euler="0.0 0.0 0.0" name="right_arm/tip" pos="0.80 0.0 .0">
+        <geom name="right_arm/tip" pos="0.3 0.0 0.0" rgba="0.3843137254901961 0.14901960784313725 0.8549019607843137 1.0" size="0.3 0.05 0.01" type="box"/>
+        <joint axis="1 0 0" name="right_arm/tip_x"/>
+        <joint axis="0 1 0" name="right_arm/tip_y"/>
+        <joint axis="0 0 1" name="right_arm/tip_z"/>
+      </body>
+    </body>
+    <body euler="0.0 0.0 180.0" name="front_arm" pos="0 0 0">
+      <geom name="front_arm" pos="0.48 0.0 0.0" rgba="0.9333333333333333 0.8313725490196079 0.9411764705882353 1.0" size="0.3 0.1 0.015" type="box"/>
+      <joint axis="1 0 0" name="front_arm_x" pos="0 0 0"/>
+      <joint axis="0 1 0" name="front_arm_y" pos="0 0 0"/>
+      <joint axis="0 0 1" name="front_arm_z" pos="0 0 0"/>
+      <body euler="0.0 0.0 0.0" name="front_arm/tip" pos="0.80 0.0 .0">
+        <geom name="front_arm/tip" pos="0.3 0.0 0.0" rgba="0.3843137254901961 0.14901960784313725 0.8549019607843137 1.0" size="0.3 0.05 0.01" type="box"/>
+        <joint axis="1 0 0" name="front_arm/tip_x"/>
+        <joint axis="0 1 0" name="front_arm/tip_y"/>
+        <joint axis="0 0 1" name="front_arm/tip_z"/>
+        <camera euler="180.0 0.0 0.0" mode="fixed" name="arm_eye" pos="0 0 0.06"/>
+      </body>
+    </body>
+    <body euler="0.0 0.0 0.0" name="back_arm" pos="0 0 0">
+      <geom name="back_arm" pos="0.48 0.0 0.0" rgba="0.9333333333333333 0.8313725490196079 0.9411764705882353 1.0" size="0.3 0.1 0.015" type="box"/>
+      <joint axis="1 0 0" name="back_arm_x" pos="0 0 0"/>
+      <joint axis="0 1 0" name="back_arm_y" pos="0 0 0"/>
+      <joint axis="0 0 1" name="back_arm_z" pos="0 0 0"/>
+      <body euler="0.0 0.0 0.0" name="back_arm/tip" pos="0.80 0.0 .0">
+        <geom name="back_arm/tip" pos="0.3 0.0 0.0" rgba="0.3843137254901961 0.14901960784313725 0.8549019607843137 1.0" size="0.3 0.05 0.01" type="box"/>
+        <joint axis="1 0 0" name="back_arm/tip_x"/>
+        <joint axis="0 1 0" name="back_arm/tip_y"/>
+        <joint axis="0 0 1" name="back_arm/tip_z"/>
+      </body>
+    </body>
+  </body>
+  <contact>
+    <exclude body1="torso" body2="left_arm"/>
+    <exclude body1="left_arm" body2="left_arm/tip"/>
+    <exclude body1="torso" body2="right_arm"/>
+    <exclude body1="right_arm" body2="right_arm/tip"/>
+    <exclude body1="torso" body2="front_arm"/>
+    <exclude body1="front_arm" body2="front_arm/tip"/>
+    <exclude body1="torso" body2="back_arm"/>
+    <exclude body1="back_arm" body2="back_arm/tip"/>
+  </contact>
+  <actuator>
+    <motor gear="1" joint="left_arm_x" name="left_arm_x"/>
+    <motor gear="1" joint="left_arm_y" name="left_arm_y"/>
+    <motor gear="1" joint="left_arm_z" name="left_arm_z"/>
+    <motor gear="5" joint="left_arm/tip_x" name="left_arm/tip_x"/>
+    <motor gear="5" joint="left_arm/tip_y" name="left_arm/tip_y"/>
+    <motor gear="5" joint="left_arm/tip_z" name="left_arm/tip_z"/>
+    <motor gear="1" joint="right_arm_x" name="right_arm_x"/>
+    <motor gear="1" joint="right_arm_y" name="right_arm_y"/>
+    <motor gear="1" joint="right_arm_z" name="right_arm_z"/>
+    <motor gear="5" joint="right_arm/tip_x" name="right_arm/tip_x"/>
+    <motor gear="5" joint="right_arm/tip_y" name="right_arm/tip_y"/>
+    <motor gear="5" joint="right_arm/tip_z" name="right_arm/tip_z"/>
+    <motor gear="1" joint="front_arm_x" name="front_arm_x"/>
+    <motor gear="1" joint="front_arm_y" name="front_arm_y"/>
+    <motor gear="1" joint="front_arm_z" name="front_arm_z"/>
+    <motor gear="5" joint="front_arm/tip_x" name="front_arm/tip_x"/>
+    <motor gear="5" joint="front_arm/tip_y" name="front_arm/tip_y"/>
+    <motor gear="5" joint="front_arm/tip_z" name="front_arm/tip_z"/>
+    <motor gear="1" joint="back_arm_x" name="back_arm_x"/>
+    <motor gear="1" joint="back_arm_y" name="back_arm_y"/>
+    <motor gear="1" joint="back_arm_z" name="back_arm_z"/>
+    <motor gear="5" joint="back_arm/tip_x" name="back_arm/tip_x"/>
+    <motor gear="5" joint="back_arm/tip_y" name="back_arm/tip_y"/>
+    <motor gear="5" joint="back_arm/tip_z" name="back_arm/tip_z"/>
+  </actuator>
+  <sensor>
+    <jointpos joint="left_arm_x" name="pos_left_arm_x"/>
+    <jointpos joint="left_arm_y" name="pos_left_arm_y"/>
+    <jointpos joint="left_arm_z" name="pos_left_arm_z"/>
+    <jointvel joint="left_arm_x" name="vel_left_arm_x"/>
+    <jointvel joint="left_arm_y" name="vel_left_arm_y"/>
+    <jointvel joint="left_arm_z" name="vel_left_arm_z"/>
+    <jointpos joint="left_arm/tip_x" name="pos_left_arm/tip_x"/>
+    <jointpos joint="left_arm/tip_y" name="pos_left_arm/tip_y"/>
+    <jointpos joint="left_arm/tip_z" name="pos_left_arm/tip_z"/>
+    <jointvel joint="left_arm/tip_x" name="vel_left_arm/tip_x"/>
+    <jointvel joint="left_arm/tip_y" name="vel_left_arm/tip_y"/>
+    <jointvel joint="left_arm/tip_z" name="vel_left_arm/tip_z"/>
+    <jointpos joint="right_arm_x" name="pos_right_arm_x"/>
+    <jointpos joint="right_arm_y" name="pos_right_arm_y"/>
+    <jointpos joint="right_arm_z" name="pos_right_arm_z"/>
+    <jointvel joint="right_arm_x" name="vel_right_arm_x"/>
+    <jointvel joint="right_arm_y" name="vel_right_arm_y"/>
+    <jointvel joint="right_arm_z" name="vel_right_arm_z"/>
+    <jointpos joint="right_arm/tip_x" name="pos_right_arm/tip_x"/>
+    <jointpos joint="right_arm/tip_y" name="pos_right_arm/tip_y"/>
+    <jointpos joint="right_arm/tip_z" name="pos_right_arm/tip_z"/>
+    <jointvel joint="right_arm/tip_x" name="vel_right_arm/tip_x"/>
+    <jointvel joint="right_arm/tip_y" name="vel_right_arm/tip_y"/>
+    <jointvel joint="right_arm/tip_z" name="vel_right_arm/tip_z"/>
+    <jointpos joint="front_arm_x" name="pos_front_arm_x"/>
+    <jointpos joint="front_arm_y" name="pos_front_arm_y"/>
+    <jointpos joint="front_arm_z" name="pos_front_arm_z"/>
+    <jointvel joint="front_arm_x" name="vel_front_arm_x"/>
+    <jointvel joint="front_arm_y" name="vel_front_arm_y"/>
+    <jointvel joint="front_arm_z" name="vel_front_arm_z"/>
+    <jointpos joint="front_arm/tip_x" name="pos_front_arm/tip_x"/>
+    <jointpos joint="front_arm/tip_y" name="pos_front_arm/tip_y"/>
+    <jointpos joint="front_arm/tip_z" name="pos_front_arm/tip_z"/>
+    <jointvel joint="front_arm/tip_x" name="vel_front_arm/tip_x"/>
+    <jointvel joint="front_arm/tip_y" name="vel_front_arm/tip_y"/>
+    <jointvel joint="front_arm/tip_z" name="vel_front_arm/tip_z"/>
+    <jointpos joint="back_arm_x" name="pos_back_arm_x"/>
+    <jointpos joint="back_arm_y" name="pos_back_arm_y"/>
+    <jointpos joint="back_arm_z" name="pos_back_arm_z"/>
+    <jointvel joint="back_arm_x" name="vel_back_arm_x"/>
+    <jointvel joint="back_arm_y" name="vel_back_arm_y"/>
+    <jointvel joint="back_arm_z" name="vel_back_arm_z"/>
+    <jointpos joint="back_arm/tip_x" name="pos_back_arm/tip_x"/>
+    <jointpos joint="back_arm/tip_y" name="pos_back_arm/tip_y"/>
+    <jointpos joint="back_arm/tip_z" name="pos_back_arm/tip_z"/>
+    <jointvel joint="back_arm/tip_x" name="vel_back_arm/tip_x"/>
+    <jointvel joint="back_arm/tip_y" name="vel_back_arm/tip_y"/>
+    <jointvel joint="back_arm/tip_z" name="vel_back_arm/tip_z"/>
+  </sensor>
+</agentbody>
