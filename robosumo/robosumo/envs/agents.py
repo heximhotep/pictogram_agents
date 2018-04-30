@@ -266,7 +266,7 @@ class Starfish(Agent):
     def __init__(self, env, scope="starfish", **kwargs):
         xml_path = os.path.join(os.path.dirname(__file__),
                                 "assets", "starfish.xml")
-        super(Spider, self).__init__(env, scope, xml_path, **kwargs)
+        super(Starfish, self).__init__(env, scope, xml_path, **kwargs)
 
 
 # ------------------------------------------------------------------------------

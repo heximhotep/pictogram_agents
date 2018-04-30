@@ -6,6 +6,19 @@ from gym.envs.registration import register
 # ------------------------------------------------------------------------------
 
 register(
+    id='RoboSumo-Starfish-vs-Starfish-v0',
+    entry_point='robosumo.envs:SumoEnv',
+    kwargs={
+        'agent_names': ['starfish', 'starfish'],
+        'agent_densities': [39., 39.],
+        'tatami_size': 4.0,
+        'timestep_limit': 500,
+        'underwater': True,
+    },
+)
+
+
+register(
     id='RoboSumo-Ant-vs-Ant-v0',
     entry_point='robosumo.envs:SumoEnv',
     kwargs={

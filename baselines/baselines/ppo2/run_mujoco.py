@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 import sys
 sys.path.append('/home/studio/Documents/aman/pictogram_agents')
-sys.path.append('/home/studio/Documents/aman/robosumo')
+sys.path.append('/home/studio/Documents/aman/pictogram_agents/robosumo/')
+
+import robosumo.envs
 
 import argparse
 from baselines.common.cmd_util import mujoco_arg_parser
 from baselines import bench, logger
-import robosumo.envs
 import starfish
 
 from baselines.common import set_global_seeds

@@ -1,55 +1,61 @@
 
 <agentbody>
-  <body childclass="starfish" name="torso" pos="0 0 1.0">
+  <default>
+    <geom solimp=".95 .99 .003" solref=".015 1" conaffinity="1" condim="3" density="5.0" friction="1 0.5 0.5" margin="0.01" rgba="0.8 0.6 0.4 1" material="geom"/>
+    <motor ctrllimited="true" ctrlrange="-1 1" />
+    <general ctrllimited="true" />
+    <joint armature=".01" damping=".2" range="-30.5 30.5" solimplimit="0 .99 .01" stiffness=".6" type="hinge" />
+  </default>
+  <body name="torso" pos="0 0 1.0">
     <joint damping="0" limited="false" name="torso/free" type="free"/>
     <geom name="torso_geom" rgba="1 0 0 1" size="0.05" type="sphere"/>
     <body euler="0.0 0.0 90.0" name="left_arm" pos="0 0 0">
       <geom name="left_arm" pos="0.48 0.0 0.0" rgba="0.9333333333333333 0.8313725490196079 0.9411764705882353 1.0" size="0.3 0.1 0.015" type="box"/>
-      <joint axis="1 0 0" name="left_arm_x" pos="0 0 0"/>
-      <joint axis="0 1 0" name="left_arm_y" pos="0 0 0"/>
-      <joint axis="0 0 1" name="left_arm_z" pos="0 0 0"/>
+      <joint armature=".01" axis="1 0 0" damping=".2" name="left_arm_x" pos="0 0 0" range="-30.5 30.5" solimplimit="0 .99 .01" stiffness=".6" type="hinge"/>
+      <joint armature=".01" axis="0 1 0" damping=".2" name="left_arm_y" pos="0 0 0" range="-30.5 30.5" solimplimit="0 .99 .01" stiffness=".6" type="hinge"/>
+      <joint armature=".01" axis="0 0 1" damping=".2" name="left_arm_z" pos="0 0 0" range="-30.5 30.5" solimplimit="0 .99 .01" stiffness=".6" type="hinge"/>
       <body euler="0.0 0.0 0.0" name="left_arm/tip" pos="0.80 0.0 .0">
         <geom name="left_arm/tip" pos="0.3 0.0 0.0" rgba="0.3843137254901961 0.14901960784313725 0.8549019607843137 1.0" size="0.3 0.05 0.01" type="box"/>
-        <joint axis="1 0 0" name="left_arm/tip_x"/>
-        <joint axis="0 1 0" name="left_arm/tip_y"/>
-        <joint axis="0 0 1" name="left_arm/tip_z"/>
+        <joint armature=".01" axis="1 0 0" damping=".2" name="left_arm/tip_x" range="-30.5 30.5" solimplimit="0 .99 .01" stiffness=".6" type="hinge"/>
+        <joint armature=".01" axis="0 1 0" damping=".2" name="left_arm/tip_y" range="-30.5 30.5" solimplimit="0 .99 .01" stiffness=".6" type="hinge"/>
+        <joint armature=".01" axis="0 0 1" damping=".2" name="left_arm/tip_z" range="-30.5 30.5" solimplimit="0 .99 .01" stiffness=".6" type="hinge"/>
       </body>
     </body>
     <body euler="0.0 0.0 -90.0" name="right_arm" pos="0 0 0">
       <geom name="right_arm" pos="0.48 0.0 0.0" rgba="0.9333333333333333 0.8313725490196079 0.9411764705882353 1.0" size="0.3 0.1 0.015" type="box"/>
-      <joint axis="1 0 0" name="right_arm_x" pos="0 0 0"/>
-      <joint axis="0 1 0" name="right_arm_y" pos="0 0 0"/>
-      <joint axis="0 0 1" name="right_arm_z" pos="0 0 0"/>
+      <joint armature=".01" axis="1 0 0" damping=".2" name="right_arm_x" pos="0 0 0" range="-30.5 30.5" solimplimit="0 .99 .01" stiffness=".6" type="hinge"/>
+      <joint armature=".01" axis="0 1 0" damping=".2" name="right_arm_y" pos="0 0 0" range="-30.5 30.5" solimplimit="0 .99 .01" stiffness=".6" type="hinge"/>
+      <joint armature=".01" axis="0 0 1" damping=".2" name="right_arm_z" pos="0 0 0" range="-30.5 30.5" solimplimit="0 .99 .01" stiffness=".6" type="hinge"/>
       <body euler="0.0 0.0 0.0" name="right_arm/tip" pos="0.80 0.0 .0">
         <geom name="right_arm/tip" pos="0.3 0.0 0.0" rgba="0.3843137254901961 0.14901960784313725 0.8549019607843137 1.0" size="0.3 0.05 0.01" type="box"/>
-        <joint axis="1 0 0" name="right_arm/tip_x"/>
-        <joint axis="0 1 0" name="right_arm/tip_y"/>
-        <joint axis="0 0 1" name="right_arm/tip_z"/>
+        <joint armature=".01" axis="1 0 0" damping=".2" name="right_arm/tip_x" range="-30.5 30.5" solimplimit="0 .99 .01" stiffness=".6" type="hinge"/>
+        <joint armature=".01" axis="0 1 0" damping=".2" name="right_arm/tip_y" range="-30.5 30.5" solimplimit="0 .99 .01" stiffness=".6" type="hinge"/>
+        <joint armature=".01" axis="0 0 1" damping=".2" name="right_arm/tip_z" range="-30.5 30.5" solimplimit="0 .99 .01" stiffness=".6" type="hinge"/>
       </body>
     </body>
     <body euler="0.0 0.0 180.0" name="front_arm" pos="0 0 0">
       <geom name="front_arm" pos="0.48 0.0 0.0" rgba="0.9333333333333333 0.8313725490196079 0.9411764705882353 1.0" size="0.3 0.1 0.015" type="box"/>
-      <joint axis="1 0 0" name="front_arm_x" pos="0 0 0"/>
-      <joint axis="0 1 0" name="front_arm_y" pos="0 0 0"/>
-      <joint axis="0 0 1" name="front_arm_z" pos="0 0 0"/>
+      <joint armature=".01" axis="1 0 0" damping=".2" name="front_arm_x" pos="0 0 0" range="-30.5 30.5" solimplimit="0 .99 .01" stiffness=".6" type="hinge"/>
+      <joint armature=".01" axis="0 1 0" damping=".2" name="front_arm_y" pos="0 0 0" range="-30.5 30.5" solimplimit="0 .99 .01" stiffness=".6" type="hinge"/>
+      <joint armature=".01" axis="0 0 1" damping=".2" name="front_arm_z" pos="0 0 0" range="-30.5 30.5" solimplimit="0 .99 .01" stiffness=".6" type="hinge"/>
       <body euler="0.0 0.0 0.0" name="front_arm/tip" pos="0.80 0.0 .0">
         <geom name="front_arm/tip" pos="0.3 0.0 0.0" rgba="0.3843137254901961 0.14901960784313725 0.8549019607843137 1.0" size="0.3 0.05 0.01" type="box"/>
-        <joint axis="1 0 0" name="front_arm/tip_x"/>
-        <joint axis="0 1 0" name="front_arm/tip_y"/>
-        <joint axis="0 0 1" name="front_arm/tip_z"/>
+        <joint armature=".01" axis="1 0 0" damping=".2" name="front_arm/tip_x" range="-30.5 30.5" solimplimit="0 .99 .01" stiffness=".6" type="hinge"/>
+        <joint armature=".01" axis="0 1 0" damping=".2" name="front_arm/tip_y" range="-30.5 30.5" solimplimit="0 .99 .01" stiffness=".6" type="hinge"/>
+        <joint armature=".01" axis="0 0 1" damping=".2" name="front_arm/tip_z" range="-30.5 30.5" solimplimit="0 .99 .01" stiffness=".6" type="hinge"/>
         <camera euler="180.0 0.0 0.0" mode="fixed" name="arm_eye" pos="0 0 0.06"/>
       </body>
     </body>
     <body euler="0.0 0.0 0.0" name="back_arm" pos="0 0 0">
       <geom name="back_arm" pos="0.48 0.0 0.0" rgba="0.9333333333333333 0.8313725490196079 0.9411764705882353 1.0" size="0.3 0.1 0.015" type="box"/>
-      <joint axis="1 0 0" name="back_arm_x" pos="0 0 0"/>
-      <joint axis="0 1 0" name="back_arm_y" pos="0 0 0"/>
-      <joint axis="0 0 1" name="back_arm_z" pos="0 0 0"/>
+      <joint armature=".01" axis="1 0 0" damping=".2" name="back_arm_x" pos="0 0 0" range="-30.5 30.5" solimplimit="0 .99 .01" stiffness=".6" type="hinge"/>
+      <joint armature=".01" axis="0 1 0" damping=".2" name="back_arm_y" pos="0 0 0" range="-30.5 30.5" solimplimit="0 .99 .01" stiffness=".6" type="hinge"/>
+      <joint armature=".01" axis="0 0 1" damping=".2" name="back_arm_z" pos="0 0 0" range="-30.5 30.5" solimplimit="0 .99 .01" stiffness=".6" type="hinge"/>
       <body euler="0.0 0.0 0.0" name="back_arm/tip" pos="0.80 0.0 .0">
         <geom name="back_arm/tip" pos="0.3 0.0 0.0" rgba="0.3843137254901961 0.14901960784313725 0.8549019607843137 1.0" size="0.3 0.05 0.01" type="box"/>
-        <joint axis="1 0 0" name="back_arm/tip_x"/>
-        <joint axis="0 1 0" name="back_arm/tip_y"/>
-        <joint axis="0 0 1" name="back_arm/tip_z"/>
+        <joint armature=".01" axis="1 0 0" damping=".2" name="back_arm/tip_x" range="-30.5 30.5" solimplimit="0 .99 .01" stiffness=".6" type="hinge"/>
+        <joint armature=".01" axis="0 1 0" damping=".2" name="back_arm/tip_y" range="-30.5 30.5" solimplimit="0 .99 .01" stiffness=".6" type="hinge"/>
+        <joint armature=".01" axis="0 0 1" damping=".2" name="back_arm/tip_z" range="-30.5 30.5" solimplimit="0 .99 .01" stiffness=".6" type="hinge"/>
       </body>
     </body>
   </body>
@@ -64,27 +70,27 @@
     <exclude body1="back_arm" body2="back_arm/tip"/>
   </contact>
   <actuator>
-    <motor gear="1" joint="left_arm_x" name="left_arm_x"/>
-    <motor gear="1" joint="left_arm_y" name="left_arm_y"/>
-    <motor gear="1" joint="left_arm_z" name="left_arm_z"/>
+    <motor gear="5" joint="left_arm_x" name="left_arm_x"/>
+    <motor gear="5" joint="left_arm_y" name="left_arm_y"/>
+    <motor gear="5" joint="left_arm_z" name="left_arm_z"/>
     <motor gear="5" joint="left_arm/tip_x" name="left_arm/tip_x"/>
     <motor gear="5" joint="left_arm/tip_y" name="left_arm/tip_y"/>
     <motor gear="5" joint="left_arm/tip_z" name="left_arm/tip_z"/>
-    <motor gear="1" joint="right_arm_x" name="right_arm_x"/>
-    <motor gear="1" joint="right_arm_y" name="right_arm_y"/>
-    <motor gear="1" joint="right_arm_z" name="right_arm_z"/>
+    <motor gear="5" joint="right_arm_x" name="right_arm_x"/>
+    <motor gear="5" joint="right_arm_y" name="right_arm_y"/>
+    <motor gear="5" joint="right_arm_z" name="right_arm_z"/>
     <motor gear="5" joint="right_arm/tip_x" name="right_arm/tip_x"/>
     <motor gear="5" joint="right_arm/tip_y" name="right_arm/tip_y"/>
     <motor gear="5" joint="right_arm/tip_z" name="right_arm/tip_z"/>
-    <motor gear="1" joint="front_arm_x" name="front_arm_x"/>
-    <motor gear="1" joint="front_arm_y" name="front_arm_y"/>
-    <motor gear="1" joint="front_arm_z" name="front_arm_z"/>
+    <motor gear="5" joint="front_arm_x" name="front_arm_x"/>
+    <motor gear="5" joint="front_arm_y" name="front_arm_y"/>
+    <motor gear="5" joint="front_arm_z" name="front_arm_z"/>
     <motor gear="5" joint="front_arm/tip_x" name="front_arm/tip_x"/>
     <motor gear="5" joint="front_arm/tip_y" name="front_arm/tip_y"/>
     <motor gear="5" joint="front_arm/tip_z" name="front_arm/tip_z"/>
-    <motor gear="1" joint="back_arm_x" name="back_arm_x"/>
-    <motor gear="1" joint="back_arm_y" name="back_arm_y"/>
-    <motor gear="1" joint="back_arm_z" name="back_arm_z"/>
+    <motor gear="5" joint="back_arm_x" name="back_arm_x"/>
+    <motor gear="5" joint="back_arm_y" name="back_arm_y"/>
+    <motor gear="5" joint="back_arm_z" name="back_arm_z"/>
     <motor gear="5" joint="back_arm/tip_x" name="back_arm/tip_x"/>
     <motor gear="5" joint="back_arm/tip_y" name="back_arm/tip_y"/>
     <motor gear="5" joint="back_arm/tip_z" name="back_arm/tip_z"/>

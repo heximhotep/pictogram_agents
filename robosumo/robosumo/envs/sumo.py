@@ -22,6 +22,7 @@ _AGENTS = {
     'ant': os.path.join(os.path.dirname(__file__), "assets", "ant.xml"),
     'bug': os.path.join(os.path.dirname(__file__), "assets", "bug.xml"),
     'spider': os.path.join(os.path.dirname(__file__), "assets", "spider.xml"),
+    'starfish': os.path.join(os.path.dirname(__file__), "assets", "starfish.xml"),
 }
 
 
@@ -50,6 +51,7 @@ class SumoEnv(MujocoEnv, EzPickle):
                  frame_skip=5,
                  tatami_size=2.0,
                  timestep_limit=500,
+                 underwater=False,
                  **kwargs):
         EzPickle.__init__(self)
         self._tatami_size = tatami_size + 0.1
@@ -68,8 +70,9 @@ class SumoEnv(MujocoEnv, EzPickle):
         ]
 
         # Consturct scene XML
+        tatami_xml = 'tatami.xml' if not underwater else 'tatami_underwater.xml'
         scene_xml_path = os.path.join(os.path.dirname(__file__),
-                                      "assets", "tatami.xml")
+                                      "assets", tatami_xml)
         agent_xml_paths = [_AGENTS[name] for name in agent_names]
         scene = construct_scene(scene_xml_path, agent_xml_paths,
                                 agent_scopes=agent_scopes,
