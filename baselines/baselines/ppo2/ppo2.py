@@ -140,6 +140,87 @@ class Runner(object):
         mb_returns = mb_advs + mb_values
         return (*map(sf01, (mb_obs, mb_returns, mb_dones, mb_actions, mb_values, mb_neglogpacs)),
             mb_states, epinfos)
+
+
+class RunnerSumo(object):
+
+    def __init__(self, *, env, model, nsteps, gamma, lam):
+        self.env = env
+        self.model = model
+        nenv = env.num_envs
+        self.nenv = nenv
+        self.nagents = len(env.observation_space.spaces)
+
+        for i, (ob_space, act_space) in enumerate(zip(env.observation_space.spaces, env.action_space.spaces)):
+            print('Agent', i, ' - observation: ', ob_space, ' - action: ', act_space)
+        # obs space of form Tuple(Box(agent_obs_shape), Box(agent_obs_shape)...)
+        # and we have nenv running in parallel
+        self.unbatched_obs = env.reset()
+        self.obs = self._concat_observations(self.unbatched_obs)
+        print('n agents:', len(self.unbatched_obs), 'n envs:', len(self.unbatched_obs[0]))
+        print('self.obs:', self.obs.shape)
+
+        self.gamma = gamma
+        self.lam = lam
+        self.nsteps = nsteps
+        self.states = model.initial_state
+        self.dones = [False for _ in range(nenv * self.nagents)]
+
+    def _concat_observations(self, obs):
+        return np.concatenate([np.stack(sub_obs, axis=0) for sub_obs in obs], axis=0)
+
+
+    def run(self):
+        mb_obs, mb_rewards, mb_actions, mb_values, mb_dones, mb_neglogpacs = [],[],[],[],[],[]
+        mb_states = self.states
+        epinfos = []
+        for _ in range(self.nsteps):
+            # stack the pair-wise self-play observations and then concat to make into a batch
+            actions, values, self.states, neglogpacs = self.model.step(self.obs, self.states, self.dones)
+            mb_obs.append(self.obs.copy())
+            mb_actions.append(actions)
+            mb_values.append(values)
+            mb_neglogpacs.append(neglogpacs)
+            mb_dones.append(self.dones)
+
+            actions = actions.reshape(self.nagents, self.nenv, actions.shape[1])
+            unconcat_actions = [(actions[0, i], actions[1, i]) for i in range(self.nenv)]
+
+            self.unbatched_obs, rewards, self.dones, infos = self.env.step(unconcat_actions)
+            self.obs = self._concat_observations(self.unbatched_obs)
+            for info in infos:
+                maybeepinfo = info.get('episode')
+                if maybeepinfo: epinfos.append(maybeepinfo)
+
+            mb_rewards.append(rewards)
+            
+        #batch of steps to batch of rollouts
+        mb_obs = np.asarray(mb_obs, dtype=self.obs.dtype)
+        mb_rewards = np.asarray(mb_rewards, dtype=np.float32)
+        mb_actions = np.asarray(mb_actions)
+        mb_values = np.asarray(mb_values, dtype=np.float32)
+        mb_neglogpacs = np.asarray(mb_neglogpacs, dtype=np.float32)
+
+        mb_dones = np.asarray(mb_dones, dtype=np.bool)
+        last_values = self.model.value(self.obs, self.states, self.dones)
+        #discount/bootstrap off value fn
+        mb_returns = np.zeros_like(mb_rewards)
+        mb_advs = np.zeros_like(mb_rewards)
+        lastgaelam = 0
+        for t in reversed(range(self.nsteps)):
+            if t == self.nsteps - 1:
+                nextnonterminal = 1.0 - self.dones
+                nextvalues = last_values
+            else:
+                nextnonterminal = 1.0 - mb_dones[t+1]
+                nextvalues = mb_values[t+1]
+            
+            delta = mb_rewards[t] + self.gamma * nextvalues * nextnonterminal - mb_values[t]
+            mb_advs[t] = lastgaelam = delta + self.gamma * self.lam * nextnonterminal * lastgaelam
+        mb_returns = mb_advs + mb_values
+        return (*map(sf01, (mb_obs, mb_returns, mb_dones, mb_actions, mb_values, mb_neglogpacs)),
+            mb_states, epinfos)
+
 # obs, returns, masks, actions, values, neglogpacs, states = runner.run()
 def sf01(arr):
     """
@@ -156,7 +237,7 @@ def constfn(val):
 def learn(*, policy, env, nsteps, total_timesteps, ent_coef, lr,
             vf_coef=0.5,  max_grad_norm=0.5, gamma=0.99, lam=0.95,
             log_interval=10, nminibatches=4, noptepochs=4, cliprange=0.2,
-            save_interval=0, load_path=None):
+            save_interval=0, load_path=None, sumo=False):
 
     if isinstance(lr, float): lr = constfn(lr)
     else: assert callable(lr)
@@ -166,7 +247,16 @@ def learn(*, policy, env, nsteps, total_timesteps, ent_coef, lr,
 
     nenvs = env.num_envs
     ob_space = env.observation_space
+        
     ac_space = env.action_space
+
+    if sumo:
+        print('observation_space:', env.observation_space)
+        print('action_space:', env.action_space)
+        ob_space = env.observation_space.spaces[0]
+        ac_space = env.action_space.spaces[0]
+        nenvs *= len(env.observation_space.spaces)
+
     nbatch = nenvs * nsteps
     nbatch_train = nbatch // nminibatches
 
@@ -181,12 +271,17 @@ def learn(*, policy, env, nsteps, total_timesteps, ent_coef, lr,
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
     
+    print('is_sumo:' , sumo)
+
     with tf.Session(config=config).as_default():
 
         model = make_model()
         if load_path is not None:
             model.load(load_path)
-        runner = Runner(env=env, model=model, nsteps=nsteps, gamma=gamma, lam=lam)
+        
+        runner_class = RunnerSumo if sumo else Runner
+
+        runner = runner_class(env=env, model=model, nsteps=nsteps, gamma=gamma, lam=lam)
 
         epinfobuf = deque(maxlen=100)
         tfirststart = time.time()
